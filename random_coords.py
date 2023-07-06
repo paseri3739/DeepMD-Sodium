@@ -12,7 +12,7 @@ NUMBER_OF_LOOPS = 3  # number of loops to generate
 def generate_random_coords(min):  # randomly generate coordinates
     SUM = 5.8  # A+B(MIN)
     coords = [(0.0, 0.0, 0.0)]  # initialize coords list
-    for _ in range(3):
+    for _ in range(3):  # 3 means x y z coords
         last_coord = coords[-1]
         rand = random.uniform(
             0.0, 1.0
@@ -26,11 +26,12 @@ def generate_random_coords(min):  # randomly generate coordinates
     return coords
 
 
-def write_coord(file, coords):
+def format_coord(coords):
+    lines = []
     for i, coord in enumerate(coords):
-        file.write(
-            f"{ATOM_LABELS[i]}    {coord[0]}    {coord[1]}    {coord[2]}\n"
-        )
+        line = f"{ATOM_LABELS[i]}    {coord[0]}    {coord[1]}    {coord[2]}\n"
+        lines.append(line)
+    return "".join(lines)
 
 
 # main
@@ -38,9 +39,8 @@ def main():
     with open(FILE_PATH, "w") as file:
         for i in range(NUMBER_OF_LOOPS):
             coords = generate_random_coords(MIN)
-            text = HEADER
-            file.write(text)
-            write_coord(file, coords)
+            file.write(HEADER)
+            file.write(format_coord(coords))
             if i < NUMBER_OF_LOOPS - 1:
                 file.write("\n--Link1--\n")
             file.write("\n")
