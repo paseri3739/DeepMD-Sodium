@@ -1,7 +1,8 @@
 import random
 
 # constants
-MIN = 2.2  # MIN
+A = 3.6  # a + b = 5.8
+B = 2.2  # MIN
 NUMBER_OF_SYSTEMS = 4
 ATOM_LABELS = ["Na"] * NUMBER_OF_SYSTEMS  # make a list that has 4 Na atoms
 HEADER = "%NProcShared=16\n%mem=12GB\n%Chk=checkpoint.chk\n#p B3LYP/6-311+g(d) force\n\nTest\n\n0 1\n"  # header
@@ -9,8 +10,7 @@ FILE_PATH = "./output/rand.com"
 NUMBER_OF_LOOPS = 3  # number of loops to generate
 
 
-def generate_random_coords(min):  # randomly generate coordinates
-    SUM = 5.8  # A+B(MIN)
+def generate_random_coords(a, b):  # randomly generate coordinates
     coords = [(0.0, 0.0, 0.0)]  # initialize coords list
     for _ in range(3):
         last_coord = coords[-1]
@@ -20,7 +20,7 @@ def generate_random_coords(min):  # randomly generate coordinates
         new_coord = (
             last_coord[0],
             last_coord[1],
-            last_coord[2] + rand * (SUM - min) + min,
+            last_coord[2] + rand * a + b,
         )
         coords.append(new_coord)
     return coords
@@ -37,7 +37,7 @@ def write_coord(file, coords):
 def main():
     with open(FILE_PATH, "w") as file:
         for i in range(NUMBER_OF_LOOPS):
-            coords = generate_random_coords(MIN)
+            coords = generate_random_coords(A, B)
             text = HEADER
             file.write(text)
             write_coord(file, coords)
