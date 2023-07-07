@@ -2,7 +2,7 @@
 
 # コマンドライン引数から入力ファイルを取得
 input_file="$1"
-output_dir="output"
+output_dir="splited"
 counter=1
 
 # 引数の数をチェック
