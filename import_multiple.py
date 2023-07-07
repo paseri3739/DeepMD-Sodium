@@ -23,7 +23,7 @@ os.makedirs(output_dir, exist_ok=True)
 
 # classmethod from_dir(dir_name, file_name, fmt='auto', type_map=None) 入力形式
 multiple = dpdata.MultiSystems.from_dir(
-    dir_name=input_dir, file_name="log*", fmt="gaussian/log"
+    dir_name=input_dir, file_name="*.log", fmt="gaussian/log"
 )  # 正規表現で捕捉する
 
 
