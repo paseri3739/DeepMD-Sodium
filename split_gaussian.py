@@ -1,15 +1,15 @@
 import os
 import sys
 
-# Get the input file from the command-line arguments
-input_file = sys.argv[1]
-output_dir = "splited"
-counter = 0
-
 # Check the number of arguments
 if len(sys.argv) != 2:
     print(f"Usage: {sys.argv[0]} <input_file>")
     sys.exit(1)
+
+# Get the input file from the command-line arguments
+input_file = sys.argv[1]
+output_dir = "splited"
+counter = 0
 
 # Check if the input file exists
 if not os.path.isfile(input_file):
