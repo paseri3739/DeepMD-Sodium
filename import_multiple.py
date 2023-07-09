@@ -28,5 +28,5 @@ multiple = dpdata.MultiSystems.from_dir(
 
 
 print(multiple)
-multiple.to_deepmd_raw("./dumpedraw/")
+multiple.to_deepmd_raw(output_dir)
 multiple.to("deepmd/npy", "data", set_size=200)
