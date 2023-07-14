@@ -9,6 +9,7 @@ if len(sys.argv) != 2:
 
 # constants
 MIN = 2.2  # MIN
+SUM = 5.8  # A+B(MIN)
 NUMBER_OF_SYSTEMS = 4
 ATOM_LABELS = ["Na"] * NUMBER_OF_SYSTEMS  # make a list that has 4 Na atoms
 HEADER = "%NProcShared=16\n%mem=12GB\n%Chk=checkpoint.chk\n#p B3LYP/6-311+g(d) force\n\nTest\n\n0 1\n"  # header
@@ -16,7 +17,6 @@ FILE_PATH = "./output/rand.com"
 NUMBER_OF_LOOPS = int(sys.argv[1])  # number of loops to generate
 
 def generate_linear_random_coords(min):  # randomly generate coordinates
-    SUM = 5.8  # A+B(MIN)
     coords = [(0.0, 0.0, 0.0)]  # initialize coords list
     for _ in range(3):  # 3 means x y z coords
         last_coord = coords[-1]
@@ -26,7 +26,7 @@ def generate_linear_random_coords(min):  # randomly generate coordinates
         new_coord = (
             last_coord[0],
             last_coord[1],
-            last_coord[2] + rand * (SUM - min) + min,
+            last_coord[2] + rand * (SUM - min) + min, #r1,2,3
         )
         coords.append(new_coord)
     return coords
