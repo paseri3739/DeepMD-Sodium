@@ -1,65 +1,62 @@
 import random
+from typing import List, Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 
-def generate_points(min, sum):
-    origin = np.array([0, 0])  # 点0の座標
-    randoms = [1, 1, 1]  # null safety
-    angles = [0.2, 0.2]  # null safety
+def generate_points(min: float, sum: float) -> List[np.ndarray]:
+    origin: np.ndarray = np.array([0, 0])
+    randoms: List[float] = [1, 1, 1]
+    angles: List[float] = [0.2, 0.2]
     for i in range(3):
-        randoms_seed = random.uniform(0, 1)
-        randoms[i] = (
-            randoms_seed * (sum - min) + min
-        )  # rand * (SUM - min) + min
+        randoms_seed: float = random.uniform(0, 1)
+        randoms[i] = randoms_seed * (sum - min) + min
     for i in range(2):
-        angle_seed = random.uniform(0, 1)
+        angle_seed: float = random.uniform(0, 1)
         angles[i] = angle_seed * np.pi
-    print(randoms)
-    print(angles)
 
-    p1 = np.array([origin[0] + randoms[0], origin[1]])
-    p2 = np.array(
+    p1: np.ndarray = np.array([origin[0] + randoms[0], origin[1]])
+    p2: np.ndarray = np.array(
         [
             p1[0] + randoms[1] * np.cos(angles[0]),
             p1[1] + randoms[1] * np.sin(angles[0]),
         ]
     )
-    p3 = np.array(
+    p3: np.ndarray = np.array(
         [
             p2[0] + randoms[2] * np.cos(angles[0] + angles[1]),
             p2[1] + randoms[2] * np.sin(angles[0] + angles[1]),
         ]
     )
-    points = [origin, p1, p2, p3]
+    points: List[np.ndarray] = [origin, p1, p2, p3]
 
     return points
 
 
-def calculate_vectors(points):
-    v01 = points[1] - points[0]
-    v23 = points[3] - points[2]
+def calculate_vectors(
+    points: List[np.ndarray],
+) -> Tuple[np.ndarray, np.ndarray]:
+    v01: np.ndarray = points[1] - points[0]
+    v23: np.ndarray = points[3] - points[2]
     return v01, v23
 
 
-def check_intersection(points, vectors):
-    result = np.linalg.solve(
-        np.vstack((vectors[0], -vectors[1])).T, points[2] - points[0]
-    )
-    s = result[0]
-    t = result[1]
+def check_intersection(points: List[np.ndarray], vectors: List[np.ndarray]) -> Tuple[float, float]:
+    result: np.ndarray = np.linalg.solve(np.vstack((vectors[0], -vectors[1])).T, points[2] - points[0])
+    s: float = result[0]
+    t: float = result[1]
 
     return s, t
 
 
-def is_parallel(cos_theta):
-    cos_pi = 0.999
+def is_parallel(cos_theta: float) -> bool:
+    cos_pi: float = 0.999
     return np.abs(cos_theta) >= cos_pi
 
 
-def check_conditions(points, ss, tt):
-    MIN = 2.2
+def check_conditions(points: List[np.ndarray], ss: float, tt: float) -> str:
+    MIN: float = 2.2
     if np.linalg.norm(points[0] - points[3]) < MIN:
         return "False0-3"
     if np.linalg.norm(points[0] - points[2]) < MIN:
@@ -72,7 +69,7 @@ def check_conditions(points, ss, tt):
         return "not crossed"
 
 
-def plot_points(points):
+def plot_points(points: List[np.ndarray]) -> None:
     plt.figure()
     plt.plot(*zip(*points), marker="o")
     for i, p in enumerate(points):
@@ -80,41 +77,33 @@ def plot_points(points):
     plt.show()
 
 
-def main():
-    # データの生成
-    MIN = 2.2
-    SUM = 5.8
-    points = generate_points(MIN, SUM)
+def main() -> None:
+    MIN: float = 2.2
+    SUM: float = 5.8
+    points: List[np.ndarray] = generate_points(MIN, SUM)
 
-    # ベクトルの計算
     v01, v23 = calculate_vectors(points)
-    vectors = [v01, v23]
+    vectors: List[np.ndarray] = [v01, v23]
 
-    # 交点の判定
-    result = check_intersection(points, vectors)
-    s = result[0]
-    t = result[1]
+    result: Tuple[float, float] = check_intersection(points, vectors)
+    s: float = result[0]
+    t: float = result[1]
 
-    # 辺の平行判定
-    cos_theta = np.dot(vectors[0], vectors[1]) / (
-        np.linalg.norm(vectors[0]) * np.linalg.norm(vectors[1])
-    )
+    cos_theta: float = np.dot(vectors[0], vectors[1]) / (np.linalg.norm(vectors[0]) * np.linalg.norm(vectors[1]))
     if is_parallel(cos_theta):
         s = 10
         t = 10
 
-    # 結果の出力とプロット
-    result = check_conditions(points, s, t)
-    if result == "not crossed":
+    condition: str = check_conditions(points, s, t)
+    if condition == "not crossed":
         plot_points(points)
-        print(result)
-    elif result == "crossed":
+        print(condition)
+    elif condition == "crossed":
         plot_points(points)
-        print(result)
+        print(condition)
     else:
-        print(result)
+        print(condition)
 
 
-# main関数の実行
 if __name__ == "__main__":
     main()
