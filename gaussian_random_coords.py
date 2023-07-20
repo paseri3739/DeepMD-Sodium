@@ -16,6 +16,7 @@ HEADER = "%NProcShared=16\n%mem=12GB\n%Chk=checkpoint.chk\n#p B3LYP/6-311+g(d) f
 FILE_PATH = "./output/rand.com"
 NUMBER_OF_LOOPS = int(sys.argv[1])  # number of loops to generate
 
+
 def generate_linear_random_coords(min):  # randomly generate coordinates
     coords = [(0.0, 0.0, 0.0)]  # initialize coords list
     for _ in range(3):  # 3 means x y z coords
@@ -26,14 +27,16 @@ def generate_linear_random_coords(min):  # randomly generate coordinates
         new_coord = (
             last_coord[0],
             last_coord[1],
-            last_coord[2] + rand * (SUM - min) + min, #r1,2,3
+            last_coord[2] + rand * (SUM - min) + min,  # r1,2,3
         )
         coords.append(new_coord)
     return coords
 
-def generate_2d_random_coords(min):# randomly generate coordinates
+
+def generate_2d_random_coords(min):  # randomly generate coordinates
     coords = [(0.0, 0.0, 0.0)]
     return coords
+
 
 def format_coord(coords):
     lines = []

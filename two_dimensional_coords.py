@@ -4,30 +4,32 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def generate_points():
+def generate_points(min, sum):
     origin = np.array([0, 0])  # 点0の座標
-    randoms = [1, 1, 1]
-    t = [0.2, 0.2]
+    randoms = [1, 1, 1]  # null safety
+    angles = [0.2, 0.2]  # null safety
     for i in range(3):
         randoms_seed = random.uniform(0, 1)
-        randoms[i] = randoms_seed  # rand * (SUM - min) + min
+        randoms[i] = (
+            randoms_seed * (sum - min) + min
+        )  # rand * (SUM - min) + min
     for i in range(2):
-        t_seed = random.uniform(0, 1)
-        t[i] = t_seed
+        angle_seed = random.uniform(0, 1)
+        angles[i] = angle_seed * np.pi
     print(randoms)
-    print(t)
+    print(angles)
 
     p1 = np.array([origin[0] + randoms[0], origin[1]])
     p2 = np.array(
         [
-            p1[0] + randoms[1] * np.cos(np.pi * t[0]),
-            p1[1] + randoms[1] * np.sin(np.pi * t[0]),
+            p1[0] + randoms[1] * np.cos(angles[0]),
+            p1[1] + randoms[1] * np.sin(angles[0]),
         ]
     )
     p3 = np.array(
         [
-            p2[0] + randoms[2] * np.cos(np.pi * (t[0] + t[1])),
-            p2[1] + randoms[2] * np.sin(np.pi * (t[0] + t[1])),
+            p2[0] + randoms[2] * np.cos(angles[0] + angles[1]),
+            p2[1] + randoms[2] * np.sin(angles[0] + angles[1]),
         ]
     )
     points = [origin, p1, p2, p3]
@@ -57,11 +59,12 @@ def is_parallel(cos_theta):
 
 
 def check_conditions(points, ss, tt):
-    if np.linalg.norm(points[0] - points[3]) < 0.2:
+    MIN = 2.2
+    if np.linalg.norm(points[0] - points[3]) < MIN:
         return "False0-3"
-    if np.linalg.norm(points[0] - points[2]) < 0.2:
+    if np.linalg.norm(points[0] - points[2]) < MIN:
         return "False0-2"
-    if np.linalg.norm(points[1] - points[3]) < 0.2:
+    if np.linalg.norm(points[1] - points[3]) < MIN:
         return "False1-3"
     if 0 < ss < 1 and 0 < tt < 1:
         return "crossed"
@@ -79,7 +82,9 @@ def plot_points(points):
 
 def main():
     # データの生成
-    points = generate_points()
+    MIN = 2.2
+    SUM = 5.8
+    points = generate_points(MIN, SUM)
 
     # ベクトルの計算
     v01, v23 = calculate_vectors(points)
