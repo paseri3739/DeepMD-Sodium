@@ -17,15 +17,17 @@ if len(sys.argv) != 2:
 NUMBER_OF_LOOPS: int = int(sys.argv[1])  # number of loops to generate
 
 
-def generate_linear_random_coords(min: float) -> List[Tuple[float, float, float]]:  # randomly generate coordinates
+def generate_linear_random_coords(
+    sum: float, min: float, number_of_systems: int
+) -> List[Tuple[float, float, float]]:  # randomly generate coordinates
     coords: List[Tuple[float, float, float]] = [(0.0, 0.0, 0.0)]  # initialize coords list
-    for _ in range(3):  # 3 means x y z coords
+    for _ in range(number_of_systems - 1):  # origin + systems -1
         last_coord = coords[-1]
         rand = random.uniform(0.0, 1.0)  # Use random.uniform for a range of 0.0 to 1.0
         new_coord = (
             last_coord[0],
             last_coord[1],
-            last_coord[2] + rand * (SUM - min) + min,  # r1,2,3
+            last_coord[2] + rand * (sum - min) + min,  # r1,2,3
         )
         coords.append(new_coord)
     return coords
@@ -43,7 +45,7 @@ def format_coord(coords: List[Tuple[float, float, float]]) -> str:
 def main() -> None:
     with open(FILE_PATH, "w") as file:
         for i in range(NUMBER_OF_LOOPS):
-            coords = generate_linear_random_coords(MIN)
+            coords = generate_linear_random_coords(SUM, MIN, NUMBER_OF_SYSTEMS)
             file.write(HEADER)
             file.write(format_coord(coords))
             if i < NUMBER_OF_LOOPS - 1:
