@@ -5,3 +5,14 @@ python(3) random_coords.py <number of loops>
 python(3) split_gaussian.py <logファイルのpath> でlogファイルをsplitedディレクトリに分割して格納する。
 
 python(3) import_multiple.py <splitedディレクトリのpath> で複数のlogファイルをdpdataによりインポートして学習用のrawファイルを生成する　
+
+クラスについての説明
+Atom型を定義し、Atom型の集まりであるGeneralAtomCluster型、4原子系の特化クラスであるFourAtomCluster型を定義した。
+
+Atom型は、原子の名前、座標の情報を持つデータ型である。
+
+GeneralAtomCluster型は、複数のAtom型をリストとして格納する。
+
+FourAtomCluster型は、4つのAtom型リストに特化した型として定義した。これにより一般のN原子系のルーチンと分けることができ将来的な保守性が高まる。
+
+GeneralAtomClusterとFourAtomClusterはともにAtomClusterInterfaceという抽象クラスを継承することで定義した。これにより系の数が違っても同じようなコードで扱うことができる。
