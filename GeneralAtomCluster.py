@@ -1,3 +1,5 @@
-import AtomClusterInterFace
+from AtomClusterInterface import AtomClusterInterface
 
-class GeneralAtomCluster(AtomClusterInterFace):
+
+class GeneralAtomCluster(AtomClusterInterface):
+    pass
