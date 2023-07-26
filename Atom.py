@@ -8,5 +8,9 @@ class Atom:
             coordinates = [0, 0, 0]
         self.coordinates = np.array(coordinates)
 
+    @classmethod
+    def from_name(cls, atom_name: str):
+        return cls(atom_name, coordinates=None)
+
     def get_coordinates(self):
         return self.coordinates
