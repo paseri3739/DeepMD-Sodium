@@ -9,7 +9,7 @@ python(3) import_multiple.py <splitedディレクトリのpath> で複数のlog�
 クラスについての説明
 Atom型を定義し、Atom型の集まりであるGeneralAtomCluster型、4原子系の特化クラスであるFourAtomCluster型を定義した。
 
-Atom型は、原子の名前、座標の情報を持つデータ型である。
+Atom型は、原子の名前、座標の情報を持つデータ型である。座標はnumpyの配列として格納する。そのように定義することで数学的なベクトル演算が簡潔になる。
 
 GeneralAtomCluster型は、複数のAtom型をリストとして格納する。
 

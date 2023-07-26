@@ -9,12 +9,16 @@ class AtomClusterInterface(ABC):
     """
 
     def __init__(self, atoms: list[Atom]):
-        self.atoms = [atoms]
+        self.atoms = atoms
 
     @abstractmethod
     def placing_atoms_in_a_plane(self, min, max):
         pass
 
-    def display_atoms(self):
-        for atom in self.atoms:
-            print(f"Atom Name: {atom.atom_name}, Coordinates: {atom.coordinates}")
+    @abstractmethod
+    def placing_atoms_in_a_line(self, min, max):
+        pass
+
+    def display_atoms(self) -> None:
+        for i, atom in enumerate(self.atoms):
+            print(f"Atom Name{i}: {atom.atom_name}, Coordinates: {atom.coordinates}")
