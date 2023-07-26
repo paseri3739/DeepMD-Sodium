@@ -1,14 +1,14 @@
 from typing import List
 
 from Atom import Atom
-from AtomClusterInterFace import AtomClusterInterface
+from AtomClusterInterface import AtomClusterInterface
 
 
 class GaussianWriter:
     # インスタンス全てで共有するデフォルト値はここで定義しておく
     default_header: str = "%NProcShared=16\n%mem=12GB\n%Chk=checkpoint.chk\n#p B3LYP/6-311+g(d) force\n\nTest\n\n0 1\n"
 
-    # コンストラクタ。ファイルパスと原子の種類を受け取る。インスタンス毎に変えるべき初期値はここで定義する。
+    # コンストラクタ。原子クラスタを受け取る。インスタンス毎に変えるべき初期値はここで定義する。
     def __init__(self, atom_cluster: AtomClusterInterface):
         self.header = self.default_header  # デフォルトヘッダを代入
         self.atom_cluster = atom_cluster
@@ -21,12 +21,13 @@ class GaussianWriter:
             for i in range(loops):
                 if self.header is not None:
                     file.write(self.header)
-                self._write_atom_cluster()
+                self._write_atom_cluster(file)
                 if i < loops - 1:
                     file.write("\n--Link1--\n")
             file.write("\n")
 
-    @staticmethod
-    def _write_atom_cluster() -> None:
-        for coord in self.atom_cluster:
-            file.write(f"{Atom.atom_name} {coord[0]} {coord[1]} {coord[2]}\n")
+    def _write_atom_cluster(self, file) -> None:
+        for atom in self.atom_cluster.atoms:
+            file.write(
+                f"{atom.atom_name} {atom.get_coordinates()[0]} {atom.get_coordinates()[1]} {atom.get_coordinates()[2]}\n"
+            )

@@ -7,3 +7,6 @@ class Atom:
         if coordinates is None:
             coordinates = [0, 0, 0]
         self.coordinates = np.array(coordinates)
+
+    def get_coordinates(self):
+        return self.coordinates

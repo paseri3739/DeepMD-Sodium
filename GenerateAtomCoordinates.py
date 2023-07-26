@@ -3,7 +3,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-import FourAtomCluster
+from FourAtomCluster import FourAtomCluster
 
 
 class GenerateAtomCoordinates:
