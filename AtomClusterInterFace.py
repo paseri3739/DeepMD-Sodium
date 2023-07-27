@@ -85,5 +85,5 @@ class AtomClusterInterface(ABC):
         for i, atom in enumerate(self.atoms):
             print(f"Atom Name{i}: {atom.atom_name}, Coordinates: {atom.coordinates}")
 
-    def get_atoms_coordinates(self) -> list[np.ndarray]:
+    def get_atoms_coordinates(self) -> list:
         return [atom.get_coordinates() for atom in self.atoms]
