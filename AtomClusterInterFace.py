@@ -13,6 +13,7 @@ class AtomClusterInterface(ABC):
     """
 
     def __init__(self, atoms: list[Atom], min, max):
+        self.origin = (0.0, 0.0, 0.0)
         self.atoms = atoms
         self.min = min
         self.max = max
