@@ -16,3 +16,4 @@ GeneralAtomCluster型は、複数のAtom型をリストとして格納する。
 FourAtomCluster型は、4つのAtom型リストに特化した型として定義した。これにより一般のN原子系のルーチンと分けることができ将来的な保守性が高まる。
 
 GeneralAtomClusterとFourAtomClusterはともにAtomClusterInterfaceという抽象クラスを継承することで定義した。これにより系の数が違っても同じようなコードで扱うことができる。
+
