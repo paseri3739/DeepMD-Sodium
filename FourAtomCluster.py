@@ -40,7 +40,7 @@ class FourAtomCluster(AtomClusterInterface):
         :param max_val: Maximum distance between atoms
         :return:
         """
-        origin: np.ndarray = np.array([0, 0])  # initialize
+        origin: np.ndarray = np.array([0.0, 0.0])  # initialize
         randoms: list[float] = [1, 1, 1]  # initialize
         angles: list[float] = [0.2, 0.2]  # initialize
         NUMBER_OF_POINTS = 4
