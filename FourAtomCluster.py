@@ -12,9 +12,9 @@ class FourAtomCluster(AtomClusterInterface):
     def __init__(self, atoms: list[Atom], min: float, max: float):
         super().__init__(atoms, min, max)
         if len(atoms) != 4:
-            raise ValueError("FourAtomCluster must have 4 atoms.")
+            raise ValueError(f"Expected 4 atoms, but got {len(atoms)}.")
 
-    def placing_atoms_in_a_line(self) -> "FourAtomCluster":
+    def place_atoms_in_a_line(self) -> "FourAtomCluster":
         """
         Places the atoms in a line with a random distance between them.
         :param min_val: Minimum distance between atoms
@@ -33,7 +33,7 @@ class FourAtomCluster(AtomClusterInterface):
 
         return self
 
-    def placing_atoms_in_a_plane(self) -> "FourAtomCluster":
+    def place_atoms_in_a_plane(self) -> "FourAtomCluster":
         """
         Places the atoms in a plane with a random distance between them.
         :param min_val: Minimum distance between atoms
@@ -101,7 +101,7 @@ class FourAtomCluster(AtomClusterInterface):
             self.plot_2d()
 
         elif plot_type == "3D":
-            self.plot_3d_with_line()
+            self.plot_3d()
 
     def check_and_report_conditions(self, plot_type: str) -> None:
         vectors = self._calculate_vectors()
@@ -113,7 +113,7 @@ class FourAtomCluster(AtomClusterInterface):
             t = 10
 
         condition = self._check_conditions(s, t)
-        if condition in ["not crossed", "crossed"]:
+        if condition in ["not crossed", "crossed"]:  # Pythonicな記法
             self._plot_points(plot_type)
             print(condition)
         else:

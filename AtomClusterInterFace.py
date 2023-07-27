@@ -19,11 +19,11 @@ class AtomClusterInterface(ABC):
         self.max = max
 
     @abstractmethod
-    def placing_atoms_in_a_plane(self):
+    def place_atoms_in_a_plane(self):
         pass
 
     @abstractmethod
-    def placing_atoms_in_a_line(self):
+    def place_atoms_in_a_line(self):
         pass
 
     def plot_2d(self) -> None:
@@ -37,7 +37,7 @@ class AtomClusterInterface(ABC):
             plt.text(p[0], p[1], str(i), ha="right")
         plt.show()
 
-    def plot_3d(self) -> None:
+    def plot_3d(self, line: bool = False) -> None:
         points = self.get_atoms_coordinates()
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
@@ -47,28 +47,11 @@ class AtomClusterInterface(ABC):
         y = [point[1] for point in points]
         z = [point[2] if len(point) > 2 else 0 for point in points]
 
-        ax.plot(x, y, z, marker="o")
-
-        for i, p in enumerate(points):
-            # Add a default z=0 coordinate if not present
-            p = list(p)
-            if len(p) == 2:
-                p.append(0)
-            ax.text(p[0], p[1], p[2], str(i), ha="right")
-        plt.show()
-
-    def plot_3d_with_line(self) -> None:
-        points = self.get_atoms_coordinates()
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection="3d")
-
-        # split coordinates into x, y and add z=0 if not present
-        x = [point[0] for point in points]
-        y = [point[1] for point in points]
-        z = [point[2] if len(point) > 2 else 0 for point in points]
-
-        # plot lines between points
-        ax.plot(x, y, z, marker="o")
+        # plot lines between points if line is True, otherwise just plot points
+        if line:
+            ax.plot(x, y, z, marker="o")
+        else:
+            ax.scatter(x, y, z, marker="o")
 
         for i, p in enumerate(points):
             # Add a default z=0 coordinate if not present
