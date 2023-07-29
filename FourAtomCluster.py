@@ -40,7 +40,7 @@ class FourAtomCluster(AtomClusterInterface):
         :param max_val: Maximum distance between atoms
         :return:
         """
-        origin: np.ndarray = np.array(self.origin[:2])  # initialize
+        origin: np.ndarray = np.array(AtomClusterInterface.origin[:2])  # initialize
         randoms: list[float] = [1, 1, 1]  # initialize
         angles: list[float] = [0.2, 0.2]  # initialize
         NUMBER_OF_POINTS = 4
@@ -113,9 +113,10 @@ class FourAtomCluster(AtomClusterInterface):
             t = 10
 
         condition = self._check_conditions(s, t)
+        if plot_type == "none":
+            print(condition)
         if condition in ["not crossed", "crossed"]:
-            if plot_type != "none":
-                self._plot_points(plot_type)
+            self._plot_points(plot_type)
             print(condition)
 
         return condition
