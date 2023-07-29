@@ -11,9 +11,9 @@ class AtomClusterInterface(ABC):
     """
     AtomCluster is a class that represents a cluster of atoms.
     """
+    origin = (0.0, 0.0, 0.0)
 
     def __init__(self, atoms: list[Atom], min, max):
-        self.origin = (0.0, 0.0, 0.0)
         self.atoms = atoms
         self.min = min
         self.max = max
