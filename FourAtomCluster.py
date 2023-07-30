@@ -115,8 +115,9 @@ class FourAtomCluster(AtomClusterInterface):
         condition = self._check_conditions(s, t)
         if plot_type == "none":
             print(condition)
+            return condition
+
         if condition in ["not crossed", "crossed"]:
             self._plot_points(plot_type)
             print(condition)
-
-        return condition
+            return condition

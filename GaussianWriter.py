@@ -30,6 +30,7 @@ class GaussianWriter:
                 if condition == "not crossed":
                     file.write(self.header)
                     self._write_atom_cluster(file)
+                    print("cluster written")
                     if i < loops - 1:
                         file.write("\n--Link1--\n")
                     count += 1  # Increment count only when condition is met
