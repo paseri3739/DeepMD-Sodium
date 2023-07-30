@@ -12,7 +12,7 @@ class GaussianWriter:
     def set_header(self, header: str = default_header) -> None:
         self.header = header
 
-    def write(self, file_path, loops: int, algorithm=lambda x: x.place_atoms_in_a_plane()) -> None:
+    def write(self, file_path, loops: int, algorithm=lambda x: x.place_atoms_in_a_plane()) -> None: #ラムダ式で処理を実行せずに受け取る
         print("write called")
         if self.header is None:
             print("No header has been set.")
@@ -20,7 +20,7 @@ class GaussianWriter:
 
         count = 0
         with open(file_path, "w") as file:
-            for i in range(loops):
+            while count < loops:
                 print(f"placing trial {count}")
                 cluster = algorithm(self.atom_cluster)  # Use the passed algorithm
 
@@ -31,15 +31,10 @@ class GaussianWriter:
                     file.write(self.header)
                     self._write_atom_cluster(file)
                     print("cluster written")
-                    if i < loops - 1:
+                    if count < loops - 1:
                         file.write("\n--Link1--\n")
                     count += 1  # Increment count only when condition is met
                     print(count)
-
-                # Break the loop if we have met the condition enough times
-                if count >= loops:
-                    break
-
         print(f"Gaussian input file has been written to {file_path}")
 
 
