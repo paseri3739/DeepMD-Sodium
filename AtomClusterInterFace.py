@@ -18,6 +18,17 @@ class AtomClusterInterface(ABC):
         self.min = min
         self.max = max
 
+    @classmethod
+    def from_atom_name(cls, atom_name: str, count: int, min: float, max: float):
+        return cls([Atom.from_name(atom_name) for _ in range(count)], min, max)
+
+    def display_atoms(self) -> None:
+        for i, atom in enumerate(self.atoms):
+            print(f"Atom Name{i}: {atom.atom_name}, Coordinates: {atom.coordinates}")
+
+    def get_atoms_coordinates(self) -> list:
+        return [atom.get_coordinates() for atom in self.atoms]
+
     @abstractmethod
     def place_atoms_in_a_plane(self):
         pass
@@ -61,13 +72,3 @@ class AtomClusterInterface(ABC):
             ax.text(p[0], p[1], p[2], str(i), ha="right")  # p0=x, p1=y, p2 = z
         plt.show()
 
-    @classmethod
-    def from_atom_name(cls, atom_name: str, count: int, min: float, max: float):
-        return cls([Atom.from_name(atom_name) for _ in range(count)], min, max)
-
-    def display_atoms(self) -> None:
-        for i, atom in enumerate(self.atoms):
-            print(f"Atom Name{i}: {atom.atom_name}, Coordinates: {atom.coordinates}")
-
-    def get_atoms_coordinates(self) -> list:
-        return [atom.get_coordinates() for atom in self.atoms]

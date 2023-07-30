@@ -13,7 +13,6 @@ class GaussianWriter:
         self.header = header
 
     def write(self, file_path, loops: int, algorithm=lambda x: x.place_atoms_in_a_plane()) -> None: #ラムダ式で処理を実行せずに受け取る
-        print("write called")
         if self.header is None:
             print("No header has been set.")
             return
@@ -34,7 +33,6 @@ class GaussianWriter:
                     if count < loops - 1:
                         file.write("\n--Link1--\n")
                     count += 1  # Increment count only when condition is met
-                    print(count)
         print(f"Gaussian input file has been written to {file_path}")
 
 

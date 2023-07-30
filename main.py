@@ -3,7 +3,7 @@ from GaussianWriter import GaussianWriter
 
 if __name__ == "__main__":
     file_path = "output.com"
-    loops = 4
+    loops = 10
     min_val = 2.2
     max_val = 5.8
 
