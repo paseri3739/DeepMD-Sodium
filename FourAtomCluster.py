@@ -64,19 +64,19 @@ class FourAtomCluster(AtomClusterInterface):
 
         return self
 
-    def _calculate_vectors(self) -> tuple[np.ndarray, np.ndarray]:
+    def _calculate_vectors(self) -> list[np.ndarray]:
         v01: np.ndarray = self.atoms[1].coordinates - self.atoms[0].coordinates  # 変更したatomの座標を利用するようにした
         v23: np.ndarray = self.atoms[3].coordinates - self.atoms[2].coordinates
-        return v01, v23
+        return [v01, v23]
 
-    def _check_intersection(self, vectors: list[np.ndarray]) -> tuple[float, float]:
+    def _check_intersection(self, vectors: list[np.ndarray]) -> list[float]:
         result: np.ndarray = np.linalg.solve(
             np.vstack((vectors[0], -vectors[1])).T, self.atoms[2].coordinates - self.atoms[0].coordinates
         )
         s: float = result[0]
         t: float = result[1]
 
-        return s, t
+        return [s, t]
 
     def _is_parallel(self, cos_theta: float) -> bool:
         cos_pi: float = 0.999
@@ -119,3 +119,5 @@ class FourAtomCluster(AtomClusterInterface):
             self._plot_points(plot_type)
             print(condition)
             return condition
+
+        return "exception: unknown condition"
