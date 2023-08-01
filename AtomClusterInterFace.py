@@ -11,6 +11,7 @@ class AtomClusterInterface(ABC):
     """
     AtomCluster is a class that represents a cluster of atoms.
     """
+
     origin = (0.0, 0.0, 0.0)
 
     def __init__(self, atoms: list[Atom], min, max):
@@ -30,11 +31,15 @@ class AtomClusterInterface(ABC):
         return [atom.get_coordinates() for atom in self.atoms]
 
     @abstractmethod
+    def place_atoms_in_a_line(self):
+        pass
+
+    @abstractmethod
     def place_atoms_in_a_plane(self):
         pass
 
     @abstractmethod
-    def place_atoms_in_a_line(self):
+    def place_atoms_in_a_cube(self):
         pass
 
     def plot_2d(self) -> None:
@@ -71,4 +76,3 @@ class AtomClusterInterface(ABC):
                 p.append(0)
             ax.text(p[0], p[1], p[2], str(i), ha="right")  # p0=x, p1=y, p2 = z
         plt.show()
-
