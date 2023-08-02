@@ -90,7 +90,7 @@ class FourAtomCluster(AtomClusterInterface):
         return [v01, v23]
 
     def _check_minimum_distance(self) -> str:
-        points = np.array(self.get_atoms_coordinates())
+        points = np.array(self.get_atoms_coordinates_by_list())
         # Distance checks for all atomic combinations
         for i in range(len(points) - 1):
             for j in range(i + 1, len(points)):

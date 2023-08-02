@@ -38,7 +38,7 @@ class GaussianWriter:
 
     def _write_atom_cluster(self, file) -> None:
         for atom in self.atom_cluster.atoms:
-            coordinates = atom.get_coordinates()
+            coordinates = atom.get_coordinates_as_list()
             # If there are only two coordinates provided (2D case), append 0 as the third coordinate
             if len(coordinates) == 2:
                 coordinates.append(AtomClusterInterface.origin[2])  # add z coordinate if it is missing

@@ -24,6 +24,8 @@ python split_gaussian.py <logファイルのpath> でlogファイルを1つの�
 
 python import_gaussian_from_dir.py <splitedディレクトリのpath> で複数のlogファイルをdpdataによりインポートしてdeepmd-kit学習用のrawファイルを生成する。
 
+# plot_from_gaussian.py
 
+python plot_from_gaussian.py <--plot=2d> </path/to/gaussian.com>  でgaussian.comの出力を2次元プロットする。現在Na、2次元のみ対応。3次元に対応させる予定。
 
 

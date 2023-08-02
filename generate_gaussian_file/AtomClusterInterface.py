@@ -27,8 +27,8 @@ class AtomClusterInterface(ABC):
         for i, atom in enumerate(self.atoms):
             print(f"Atom Name{i}: {atom.atom_name}, Coordinates: {atom.coordinates}")
 
-    def get_atoms_coordinates(self) -> list:
-        return [atom.get_coordinates() for atom in self.atoms]
+    def get_atoms_coordinates_by_list(self) -> list:
+        return [atom.get_coordinates_as_list() for atom in self.atoms]
 
     @abstractmethod
     def place_atoms_in_a_line(self):
@@ -43,7 +43,7 @@ class AtomClusterInterface(ABC):
         pass
 
     def plot_2d(self) -> None:
-        points = self.get_atoms_coordinates()
+        points = self.get_atoms_coordinates_by_list()
         plt.figure()
         # split coordinates into x and y
         x = [point[0] for point in points]
@@ -54,7 +54,7 @@ class AtomClusterInterface(ABC):
         plt.show()
 
     def plot_3d(self, line: bool = False) -> None:
-        points = self.get_atoms_coordinates()
+        points = self.get_atoms_coordinates_by_list()
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
 
