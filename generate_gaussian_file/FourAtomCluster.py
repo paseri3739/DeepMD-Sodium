@@ -32,30 +32,30 @@ class FourAtomCluster(AtomClusterInterface):
     def place_atoms_in_a_plane(self) -> "FourAtomCluster":
         """
         Places the atoms in a plane with a random distance between them.
-        :param min_val: Minimum distance between atoms
-        :param max_val: Maximum distance between atoms
-        :return:
+        The minimum and maximum distances between atoms are determined by the self.min and self.max attributes.
+        :return: self
         """
-        origin: np.ndarray = np.array(AtomClusterInterface.origin[:2])  # initialize
-        randoms: list[float] = [1, 1, 1]  # initialize
-        angles: list[float] = [0.2, 0.2]  # initialize
+        prev_point = np.array(self.origin[:2])  # set origin(0.0,0.0)
+        # set an array initialized with 0.0 for the number of angles (size of system -2), here is 2
+        angles = [0.0] * self.NUMBER_OF_ANGLES
+        points = [prev_point]
+
         for i in range(self.SIZE_OF_SYSTEM - 1):
-            randoms_seed: float = random.uniform(0, 1)
-            randoms[i] = randoms_seed * (self.max - self.min) + self.min
-        for i in range(self.NUMBER_OF_ANGLES):
-            angle_seed: float = random.uniform(0, 1)
-            angles[i] = angle_seed * np.pi
-        p0: np.ndarray = origin
-        p1: np.ndarray = np.array([p0[0] + randoms[0], p0[1]])
-        p2: np.ndarray = np.array([p1[0] + randoms[1] * np.cos(angles[0]), p1[1] + randoms[1] * np.sin(angles[0])])
-        p3: np.ndarray = np.array(
-            [
-                p2[0] + randoms[2] * np.cos(angles[0] + angles[1]),
-                p2[1] + randoms[2] * np.sin(angles[0] + angles[1]),
-            ]
-        )
-        points: list[np.ndarray] = [p0, p1, p2, p3]
-        for i, atom in enumerate(self.atoms):  # クラス設計にあたっての変更点
+            # Calculate the random distance and angle
+            random_distance = np.random.uniform(self.min, self.max)
+            if i < self.NUMBER_OF_ANGLES:
+                angles[i] = np.random.uniform(0, np.pi)
+
+            # Generate the next point based on the random distance and angle
+            next_point = prev_point + random_distance * np.array(
+                [np.cos(np.sum(angles[: i + 1])), np.sin(np.sum(angles[: i + 1]))]
+            )
+            points.append(next_point)
+
+            # Update prev_point
+            prev_point = next_point
+
+        for i, atom in enumerate(self.atoms):
             atom.coordinates = points[i]
 
         return self
@@ -84,21 +84,19 @@ class FourAtomCluster(AtomClusterInterface):
 
         return self
 
-    def _check_distances_in_cube(self) -> str:
-        points = np.array(self.get_atoms_coordinates())
-        if np.linalg.norm(points[0] - points[3]) < self.min:
-            return "False0-3"
-        elif np.linalg.norm(points[0] - points[2]) < self.min:
-            return "False0-2"
-        elif np.linalg.norm(points[1] - points[2]) < self.min:
-            return "False1-3"
-        else:
-            return "distances okay"
-
     def _calculate_vectors(self) -> list[np.ndarray]:
         v01: np.ndarray = self.atoms[1].coordinates - self.atoms[0].coordinates  # 変更したatomの座標を利用するようにした
         v23: np.ndarray = self.atoms[3].coordinates - self.atoms[2].coordinates
         return [v01, v23]
+
+    def _check_minimum_distance(self) -> str:
+        points = np.array(self.get_atoms_coordinates())
+        # Distance checks for all atomic combinations
+        for i in range(len(points) - 1):
+            for j in range(i + 1, len(points)):
+                if np.linalg.norm(points[i] - points[j]) < self.min:
+                    return f"False{i}-{j}"
+        return "distances okay"
 
     def _check_intersection(self, vectors: list[np.ndarray]) -> list[float]:
         result: np.ndarray = np.linalg.solve(
@@ -113,18 +111,6 @@ class FourAtomCluster(AtomClusterInterface):
         cos_pi: float = 0.999
         return np.abs(cos_theta) >= cos_pi
 
-    def _check_conditions(self, s: float, t: float) -> str:
-        if np.linalg.norm(self.atoms[0].coordinates - self.atoms[3].coordinates) < self.min:  # ハードコーディングを変更
-            return "False0-3"
-        if np.linalg.norm(self.atoms[0].coordinates - self.atoms[2].coordinates) < self.min:
-            return "False0-2"
-        if np.linalg.norm(self.atoms[1].coordinates - self.atoms[3].coordinates) < self.min:
-            return "False1-3"
-        if 0 < s < 1 and 0 < t < 1:
-            return "crossed"
-        else:
-            return "not crossed"
-
     def _plot_points(self, plot_type: str) -> None:
         if plot_type == "2D":
             self.plot_2d()
@@ -132,7 +118,17 @@ class FourAtomCluster(AtomClusterInterface):
         elif plot_type == "3D":
             self.plot_3d()
 
+    def _check_conditions(self, s: float, t: float) -> str:
+        if 0 < s < 1 and 0 < t < 1:
+            return "crossed"
+        else:
+            return "not crossed"
+
     def check_and_report_conditions(self, plot_type: str) -> str:
+        min_distance_check = self._check_minimum_distance()
+        if min_distance_check != "distances okay":
+            return min_distance_check
+
         vectors = self._calculate_vectors()
         s, t = self._check_intersection(vectors)
 

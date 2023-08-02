@@ -1,4 +1,3 @@
-
 from AtomClusterInterface import AtomClusterInterface
 
 
@@ -12,7 +11,9 @@ class GaussianWriter:
     def set_header(self, header: str = default_header) -> None:
         self.header = header
 
-    def write(self, file_path, loops: int, algorithm=lambda cluster: cluster.place_atoms_in_a_plane()) -> None: #ラムダ式で処理を実行せずに受け取る
+    def write(
+        self, file_path, loops: int, algorithm=lambda cluster: cluster.place_atoms_in_a_plane()
+    ) -> None:  # ラムダ式で処理を実行せずに受け取る
         if self.header is None:
             print("No header has been set.")
             return
@@ -40,5 +41,5 @@ class GaussianWriter:
             coordinates = atom.get_coordinates()
             # If there are only two coordinates provided (2D case), append 0 as the third coordinate
             if len(coordinates) == 2:
-                coordinates.append(AtomClusterInterface.origin[2]) # add z coordinate if it is missing
+                coordinates.append(AtomClusterInterface.origin[2])  # add z coordinate if it is missing
             file.write(f"{atom.atom_name} {coordinates[0]} {coordinates[1]} {coordinates[2]}\n")
