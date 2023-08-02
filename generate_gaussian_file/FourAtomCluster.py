@@ -126,8 +126,9 @@ class FourAtomCluster(AtomClusterInterface):
 
     def check_and_report_conditions(self, plot_type: str) -> str:
         min_distance_check = self._check_minimum_distance()
+        print(min_distance_check)
         if min_distance_check != "distances okay":
-            return min_distance_check
+            return min_distance_check  # FALSE {I}-{J}
 
         vectors = self._calculate_vectors()
         s, t = self._check_intersection(vectors)

@@ -10,8 +10,8 @@ if __name__ == "__main__":
     atom_cluster = FourAtomCluster.from_atom_name(atom_name="Na", count=4, min=min_val, max=max_val)
 
     # リファクタリングによりメソッドチェーンによる記述が可能となった
-    # atom_cluster.place_atoms_in_a_plane().check_and_report_conditions(plot_type="2D")
+    atom_cluster.place_atoms_in_a_plane().check_and_report_conditions(plot_type="2D")
 
-    writer = GaussianWriter(atom_cluster)
+    # writer = GaussianWriter(atom_cluster)
     # ラムダ式を使うとメソッドを実行せずに別のメソッドに渡せる
-    writer.write(file_path, loops, algorithm=lambda cluster: atom_cluster.place_atoms_in_a_plane())
+    # writer.write(file_path, loops, algorithm=lambda cluster: atom_cluster.place_atoms_in_a_plane())
