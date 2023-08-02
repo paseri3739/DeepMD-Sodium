@@ -15,19 +15,17 @@ class FourAtomCluster(AtomClusterInterface):
     def place_atoms_in_a_line(self) -> "FourAtomCluster":
         """
         Places the atoms in a line with a random distance between them.
-        :param min_val: Minimum distance between atoms
-        :param max_val: Maximum distance between atoms
-        :return:
+        The minimum and maximum distances between atoms are determined by the self.min and self.max attributes.
+        :return: self
         """
-        # Generate the points
-        coords = np.zeros((len(self.atoms), 3))
-        for i in range(1, len(self.atoms)):
-            rand = np.random.uniform(0.0, 1.0)
-            coords[i] = coords[i - 1] + [0.0, 0.0, rand * (self.max - self.min) + self.min]
+        prev_z = self.origin[2]  # initial z coordinate = 0
+        for i in range(self.SIZE_OF_SYSTEM):
+            if i != 0:  # For the first atom, keep the coordinates at zero.
+                rand = np.random.uniform(0.0, 1.0)
+                z_offset = rand * (self.max - self.min) + self.min
+                prev_z += z_offset
 
-        # Update the coordinates of the atoms with the generated points
-        for i, coord in enumerate(coords):
-            self.atoms[i].coordinates = coord
+            self.atoms[i].coordinates = np.array([self.origin[0], self.origin[1], prev_z])
 
         return self
 
