@@ -1,19 +1,29 @@
 # random_coords_for_gaussian
-random_coords.pyは乱数により複数の座標の組を持った入力ファイルを作成する。
-python(3) random_coords.py <number of loops>
+本プロジェクトは科学技術の発展振興のため、GPL3.0により公開する。改変したプログラムを公開する場合GPLを適用しソースコード全体を公開せよ。
 
-python(3) split_gaussian.py <logファイルのpath> でlogファイルをsplitedディレクトリに分割して格納する。
+このプログラムは、複数のガウス分布の座標を生成して機械学習を行うための一連のフローを提供する。
 
-python(3) import_multiple.py <splitedディレクトリのpath> で複数のlogファイルをdpdataによりインポートして学習用のrawファイルを生成する　
+# 設計の説明:
+Atom, AtomClusterInterface, GeneralAtomCluster, FourAtomCluster, GaussianWriterの4つのクラスを定義している。
 
-クラスについての説明
-Atom型を定義し、Atom型の集まりであるGeneralAtomCluster型、4原子系の特化クラスであるFourAtomCluster型を定義した。
+Atom型は、原子の名前、座標の情報を持つデータ型である。座標はnumpyの配列として格納する。そのように定義することで数学的なベクトル演算が簡単かつ高速に行えるようになる。
+AtomClusterInterfaceはAtomのリストをもつ。GeneralAtomCluster, FourAtomClusterの継承元となるインターフェースであり、一般の原子系に適用可能なプロットメソッドと原子の座標取得メソッドを実装している。
 
-Atom型は、原子の名前、座標の情報を持つデータ型である。座標はnumpyの配列として格納する。そのように定義することで数学的なベクトル演算が簡潔になる。
+GeneralAtomClusterはAtomClusterInterfaceを継承し、将来的にN原子系に対応する。
+FourAtomCluster型は、4つのAtom型リストに特化した型として定義した。これにより一般のN原子系のルーチンと分け、呼び出し元はAtomClusterInterfaceを参照するようにすることで将来的な保守性を高めるように設計した。
 
-GeneralAtomCluster型は、複数のAtom型をリストとして格納する。
+これらのクラスをimportしてmainで呼び出すことにより必要に応じて座標の配置、可視化、そして配置した座標をもとに原子間距離とグラフの交差を基準にして実現可能性のある原子配置をGaussian用の計算ファイルに必要な数だけ書き込むことができる。
 
-FourAtomCluster型は、4つのAtom型リストに特化した型として定義した。これにより一般のN原子系のルーチンと分けることができ将来的な保守性が高まる。
+# 後処理用スクリプトの説明:
 
-GeneralAtomClusterとFourAtomClusterはともにAtomClusterInterfaceという抽象クラスを継承することで定義した。これにより系の数が違っても同じようなコードで扱うことができる。
+# split_gaussian.py
+
+python split_gaussian.py <logファイルのpath> でlogファイルを1つの計算毎にsplitedディレクトリに分割して格納する。これはdeepmd-kit学習用ファイルを作成するためのdpdataが、複数の計算を格納したlogファイルのインポートに対応していないため、分割して1つのディレクトリに格納し、そのディレクトリを読み込む必要があるためである。
+
+# import_gaussian_from_dir.py
+
+python import_gaussian_from_dir.py <splitedディレクトリのpath> で複数のlogファイルをdpdataによりインポートしてdeepmd-kit学習用のrawファイルを生成する。
+
+
+
 
