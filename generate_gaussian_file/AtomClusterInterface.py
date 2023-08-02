@@ -12,10 +12,12 @@ class AtomClusterInterface(ABC):
 
     origin = (0.0, 0.0, 0.0)
 
-    def __init__(self, atoms: list[Atom], min, max):
+    def __init__(self, atoms: list[Atom], min: float, max: float):
         self.atoms = atoms
         self.min = min
         self.max = max
+        self.SIZE_OF_SYSTEM: int = len(atoms)
+        self.NUMBER_OF_ANGLES: int = len(atoms) - 2
 
     @classmethod
     def from_atom_name(cls, atom_name: str, count: int, min: float, max: float):

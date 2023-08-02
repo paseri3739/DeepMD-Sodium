@@ -9,8 +9,8 @@ from AtomClusterInterface import AtomClusterInterface
 class FourAtomCluster(AtomClusterInterface):
     def __init__(self, atoms: list[Atom], min: float, max: float):
         super().__init__(atoms, min, max)
-        if len(atoms) != 4:
-            raise ValueError(f"Expected 4 atoms, but got {len(atoms)}.")
+        if self.SIZE_OF_SYSTEM != 4:
+            raise ValueError(f"Expected 4 atoms, but got {self.SIZE_OF_SYSTEM}.")
 
     def place_atoms_in_a_line(self) -> "FourAtomCluster":
         """
@@ -41,12 +41,10 @@ class FourAtomCluster(AtomClusterInterface):
         origin: np.ndarray = np.array(AtomClusterInterface.origin[:2])  # initialize
         randoms: list[float] = [1, 1, 1]  # initialize
         angles: list[float] = [0.2, 0.2]  # initialize
-        NUMBER_OF_POINTS = 4
-        NUMBER_OF_ANGLES = 2
-        for i in range(NUMBER_OF_POINTS - 1):
+        for i in range(self.SIZE_OF_SYSTEM - 1):
             randoms_seed: float = random.uniform(0, 1)
             randoms[i] = randoms_seed * (self.max - self.min) + self.min
-        for i in range(NUMBER_OF_ANGLES):
+        for i in range(self.NUMBER_OF_ANGLES):
             angle_seed: float = random.uniform(0, 1)
             angles[i] = angle_seed * np.pi
         p0: np.ndarray = origin
@@ -66,8 +64,9 @@ class FourAtomCluster(AtomClusterInterface):
 
     def place_atoms_in_a_cube(self) -> "FourAtomCluster":
         # Parameters as lists
-        r = np.random.rand(3)  # Create an array of the given shape and populate it with random samples
-        t = np.random.rand(2)
+        # Create an array of the given shape and populate it with random samples
+        r = np.random.rand(self.SIZE_OF_SYSTEM - 1)
+        t = np.random.rand(self.NUMBER_OF_ANGLES)
         f = np.random.rand()
 
         # Generate points
@@ -87,13 +86,13 @@ class FourAtomCluster(AtomClusterInterface):
 
         return self
 
-    def check_distances_in_cube(self, criteria: float) -> str:
+    def _check_distances_in_cube(self) -> str:
         points = np.array(self.get_atoms_coordinates())
-        if np.linalg.norm(points[0] - points[3]) < criteria:
+        if np.linalg.norm(points[0] - points[3]) < self.min:
             return "False0-3"
-        elif np.linalg.norm(points[0] - points[2]) < criteria:
+        elif np.linalg.norm(points[0] - points[2]) < self.min:
             return "False0-2"
-        elif np.linalg.norm(points[1] - points[2]) < criteria:
+        elif np.linalg.norm(points[1] - points[2]) < self.min:
             return "False1-3"
         else:
             return "distances okay"
