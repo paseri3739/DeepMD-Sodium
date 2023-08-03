@@ -10,6 +10,7 @@ if __name__ == "__main__":
     atom_cluster = FourAtomCluster.from_atom_name(atom_name="Na", count=4, min=min_val, max=max_val)
     atom_cluster.place_atoms_in_a_cube().check_and_report_conditions(plot_type="none")
     atom_cluster.display_atoms()
+    atom_cluster.print_atom_distances()
     atom_cluster.plot_3d(line=True)
 
     # writer = GaussianWriter(atom_cluster)

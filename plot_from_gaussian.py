@@ -56,7 +56,7 @@ def get_plot_dimensions(num_molecules):
 
 def plot_2d_molecule(ax, molecule, index):
     atoms, x, y, z = zip(*molecule)
-    ax.plot(x, y, color="blue")  # Plot line
+    ax.plot(x + x[:1], y + y[:1], color="blue")  # Plot line (with line from last point to first)
     ax.scatter(x, y, color="red", s=100)  # Plot points
     for j in range(len(x)):  # Add labels
         ax.text(x[j], y[j], f"{atoms[j]}{j + 1}", color="green", fontsize=12)
@@ -67,7 +67,7 @@ def plot_2d_molecule(ax, molecule, index):
 
 def plot_3d_molecule(ax, molecule, index):
     atoms, x, y, z = zip(*molecule)
-    ax.plot(x, y, z, color="blue")  # Plot line
+    ax.plot(x + x[:1], y + y[:1], z + z[:1], color="blue")  # Plot line (with line from last point to first)
     ax.scatter(x, y, z, color="red", s=100)  # Plot points
     for j in range(len(x)):  # Add labels
         ax.text(x[j], y[j], z[j], f"{atoms[j]}{j + 1}", color="green", fontsize=12)

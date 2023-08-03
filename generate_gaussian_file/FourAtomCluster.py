@@ -1,5 +1,3 @@
-import random
-
 import numpy as np
 
 from Atom import Atom
@@ -63,22 +61,22 @@ class FourAtomCluster(AtomClusterInterface):
     def place_atoms_in_a_cube(self) -> "FourAtomCluster":
         # Parameters as lists
         # Create an array of the given shape and populate it with random samples
-        r = np.random.rand(self.SIZE_OF_SYSTEM - 1)
-        t = np.random.rand(self.NUMBER_OF_ANGLES)
-        f = np.random.rand()
+        r = np.random.rand(self.SIZE_OF_SYSTEM - 1) * (self.max - self.min) + self.min  # Update this line
+        t = np.pi * np.random.rand(self.NUMBER_OF_ANGLES)  # Multiply pi directly here
+        f = np.pi * np.random.rand()  # Multiply pi directly here
 
         # Generate points
-        p1 = np.array(AtomClusterInterface.origin)
-        p0 = np.array([-r[0] * np.sin(np.pi * t[0]), 0, -r[0] * np.cos(np.pi * t[0])])
+        p0 = np.array(AtomClusterInterface.origin)  # Changed from p1 to p0
+        p1 = np.array([-r[0] * np.sin(t[0]), 0, -r[0] * np.cos(t[0])])  # Changed from p0 to p1
         p2 = np.array([0, 0, r[1]])
         p33 = np.array(
             [
-                -r[2] * np.sin(np.pi * t[1]) * np.cos(np.pi * f),
-                -r[2] * np.sin(np.pi * t[1]) * np.sin(np.pi * f),
-                r[1] - r[2] * np.cos(np.pi * t[1]),
+                -r[2] * np.sin(t[1]) * np.cos(f),
+                -r[2] * np.sin(t[1]) * np.sin(f),
+                r[1] - r[2] * np.cos(t[1]),
             ]
         )
-        points = [p0, p1, p2, p33]
+        points = [p0, p1, p2, p33]  # Also changed the order here
         for i, atom in enumerate(self.atoms):
             atom.coordinates = points[i]
 
@@ -92,10 +90,10 @@ class FourAtomCluster(AtomClusterInterface):
     def _check_minimum_distance(self) -> str:
         points = np.array(self.get_atoms_coordinates_by_list())
         # Distance checks for all atomic combinations
-        for i in range(len(points) - 1):
-            for j in range(i + 1, len(points)):
+        for i in range(self.SIZE_OF_SYSTEM - 1):
+            for j in range(i + 1, self.SIZE_OF_SYSTEM):
                 if np.linalg.norm(points[i] - points[j]) < self.min:
-                    return f"False{i}-{j}"
+                    return f"False{i + 1}-{j + 1}"
         return "distances okay"
 
     def _check_intersection(self, vectors: list[np.ndarray]) -> list[float]:
@@ -123,6 +121,12 @@ class FourAtomCluster(AtomClusterInterface):
             return "crossed"
         else:
             return "not crossed"
+
+    def print_atom_distances(self) -> None:
+        for i in range(self.SIZE_OF_SYSTEM):
+            for j in range(i + 1, self.SIZE_OF_SYSTEM):
+                distance = np.linalg.norm(self.atoms[i].coordinates - self.atoms[j].coordinates)
+                print(f"Distance between atom {i + 1} and atom {j +1}: {distance}")
 
     def check_and_report_conditions(self, plot_type: str) -> str:
         min_distance_check = self._check_minimum_distance()

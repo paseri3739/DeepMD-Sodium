@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from matplotlib import pyplot as plt
-
+from mpl_toolkits.mplot3d import Axes3D
 from Atom import Atom
 
 
@@ -25,7 +25,7 @@ class AtomClusterInterface(ABC):
 
     def display_atoms(self) -> None:
         for i, atom in enumerate(self.atoms):
-            print(f"Atom Name{i}: {atom.atom_name}, Coordinates: {atom.coordinates}")
+            print(f"Atom Name{i + 1}: {atom.atom_name}, Coordinates: {atom.coordinates}")
 
     def get_atoms_coordinates_by_list(self) -> list:
         return [atom.get_coordinates_as_list() for atom in self.atoms]
@@ -48,9 +48,11 @@ class AtomClusterInterface(ABC):
         # split coordinates into x and y
         x = [point[0] for point in points]
         y = [point[1] for point in points]
-        plt.plot(x, y, marker="o")
-        for i, p in enumerate(points):
-            plt.text(p[0], p[1], str(i), ha="right")
+        plt.plot(x + [x[0]], y + [y[0]], marker="o")  # Adding the first point to the end to create a closed loop
+        for i, atom in enumerate(self.atoms):
+            plt.text(
+                points[i][0], points[i][1], atom.atom_name + str(i + 1), ha="right"
+            )  # Adding index to the atom name
         plt.show()
 
     def plot_3d(self, line: bool = False) -> None:
@@ -65,14 +67,16 @@ class AtomClusterInterface(ABC):
 
         # plot lines between points if line is True, otherwise just plot points
         if line:
-            ax.plot(x, y, z, marker="o")
+            ax.plot(
+                x + [x[0]], y + [y[0]], z + [z[0]], marker="o"
+            )  # Adding the first point to the end to create a closed loop
         else:
             ax.scatter(x, y, z, marker="o")
 
-        for i, p in enumerate(points):
+        for i, atom in enumerate(self.atoms):
             # Add a default z=0 coordinate if not present
-            p = list(p)
+            p = list(points[i])
             if len(p) == 2:
                 p.append(0)
-            ax.text(p[0], p[1], p[2], str(i), ha="right")  # p0=x, p1=y, p2 = z
+            ax.text(p[0], p[1], p[2], atom.atom_name + str(i + 1), ha="right")  # Adding index to the atom name
         plt.show()
