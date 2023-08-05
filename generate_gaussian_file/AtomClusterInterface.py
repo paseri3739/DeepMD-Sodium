@@ -12,7 +12,7 @@ class AtomClusterInterface(ABC):
     AtomCluster is a class that represents a cluster of atoms.
     """
 
-    origin_xyz = (0.0, 0.0, 0.0)
+    origin = (0.0, 0.0, 0.0)
 
     def __init__(self, atoms: list[Atom], min: float, max: float):
         """

@@ -39,5 +39,5 @@ class GaussianWriter:
             coordinates = atom.get_coordinates_as_list()
             # If there are only two coordinates provided (2D case), append 0 as the third coordinate
             if len(coordinates) == 2:
-                coordinates.append(AtomClusterInterface.origin_xyz[2])  # add z coordinate if it is missing
+                coordinates.append(AtomClusterInterface.origin[2])  # add z coordinate if it is missing
             file.write(f"{atom.atom_name} {coordinates[0]} {coordinates[1]} {coordinates[2]}\n")
