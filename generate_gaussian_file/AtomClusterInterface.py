@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from Atom import Atom
+from typing import Union
 
 
 class AtomClusterInterface(ABC):
@@ -42,17 +43,42 @@ class AtomClusterInterface(ABC):
     def place_atoms_in_a_cube(self):
         pass
 
+    @abstractmethod
+    def is_possible(self) -> bool:
+        """
+        Checks if the atoms are writable by verifying the specific conditions of the atom cluster.
+        :return: bool: True if the atoms are writable (i.e., conditions are met), False otherwise.
+        """
+        pass
+
+    @abstractmethod
+    def display_atom_distances(self) -> None:
+        pass
+
+    @abstractmethod
+    def check_minimum_distance(self, checkall: bool = False) -> Union[str, list[str]]:
+        pass
+
+    @abstractmethod
+    def display_vector_condition(self) -> None:
+        pass
+
+    @abstractmethod
+    def display_distance_condition(self) -> None:
+        pass
+
     def plot_2d(self) -> None:
         points = self.get_atoms_coordinates_by_list()
-        plt.figure()
+        fig, ax = plt.subplots()
         # split coordinates into x and y
         x = [point[0] for point in points]
         y = [point[1] for point in points]
-        plt.plot(x + [x[0]], y + [y[0]], marker="o")  # Adding the first point to the end to create a closed loop
+        ax.plot(x + [x[0]], y + [y[0]], marker="o")  # Adding the first point to the end to create a closed loop
         for i, atom in enumerate(self.atoms):
-            plt.text(
+            ax.text(
                 points[i][0], points[i][1], atom.atom_name + str(i + 1), ha="right"
             )  # Adding index to the atom name
+        ax.set_aspect("equal", "box")  # Set the aspect of the plot to 1:1
         plt.show()
 
     def plot_3d(self, line: bool = False) -> None:

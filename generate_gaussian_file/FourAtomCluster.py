@@ -2,6 +2,7 @@ import numpy as np
 
 from Atom import Atom
 from AtomClusterInterface import AtomClusterInterface
+from typing import Union
 
 
 class FourAtomCluster(AtomClusterInterface):
@@ -82,59 +83,52 @@ class FourAtomCluster(AtomClusterInterface):
 
         return self
 
-    def _calculate_vectors(self) -> list[np.ndarray]:
+    def _calculate_vectors(self) -> tuple[np.ndarray, np.ndarray]:
         v01: np.ndarray = self.atoms[1].coordinates - self.atoms[0].coordinates  # 変更したatomの座標を利用するようにした
         v23: np.ndarray = self.atoms[3].coordinates - self.atoms[2].coordinates
-        return [v01, v23]
+        return (v01, v23)
 
-    def _check_minimum_distance(self) -> str:
+    def check_minimum_distance(self, checkall: bool = False) -> Union[str, list[str]]:
         points = np.array(self.get_atoms_coordinates_by_list())
         # Distance checks for all atomic combinations
+        fails = []
         for i in range(self.SIZE_OF_SYSTEM - 1):
             for j in range(i + 1, self.SIZE_OF_SYSTEM):
-                if np.linalg.norm(points[i] - points[j]) < self.min:
-                    return f"False{i + 1}-{j + 1}"
-        return "distances okay"
+                if np.linalg.norm(points[i] - points[j]) >= self.min:
+                    continue
+                fails.append(f"False{i + 1}-{j + 1}")
+                if not checkall:
+                    return fails[0]
+        # failsに値が入っていればfailsを返し、入っていなければ(falseでなければ)"distances okay"を返す。距離が通る場合str型になる。
+        return fails if fails else "distances okay"
 
-    def _check_intersection(self, vectors: list[np.ndarray]) -> list[float]:
+    def display_atom_distances(self) -> None:
+        for i in range(self.SIZE_OF_SYSTEM):
+            for j in range(i + 1, self.SIZE_OF_SYSTEM):
+                distance = np.linalg.norm(self.atoms[i].coordinates - self.atoms[j].coordinates)
+                print(f"Distance between atom {i + 1} and atom {j +1}: {distance}")
+
+    def _check_intersection(self, vectors: tuple[np.ndarray, np.ndarray]) -> tuple[float, float]:
         result: np.ndarray = np.linalg.solve(
             np.vstack((vectors[0], -vectors[1])).T, self.atoms[2].coordinates - self.atoms[0].coordinates
         )
         s: float = result[0]
         t: float = result[1]
 
-        return [s, t]
+        return (s, t)
 
     def _is_parallel(self, cos_theta: float) -> bool:
         cos_pi: float = 0.999
         return np.abs(cos_theta) >= cos_pi
 
-    def _plot_points(self, plot_type: str) -> None:
-        if plot_type == "2D":
-            self.plot_2d()
-
-        elif plot_type == "3D":
-            self.plot_3d()
-
-    def _check_conditions(self, s: float, t: float) -> str:
+    def _check_crossing(self, s: float, t: float) -> str:
         if 0 < s < 1 and 0 < t < 1:
             return "crossed"
         else:
             return "not crossed"
 
-    def print_atom_distances(self) -> None:
-        for i in range(self.SIZE_OF_SYSTEM):
-            for j in range(i + 1, self.SIZE_OF_SYSTEM):
-                distance = np.linalg.norm(self.atoms[i].coordinates - self.atoms[j].coordinates)
-                print(f"Distance between atom {i + 1} and atom {j +1}: {distance}")
-
-    def check_and_report_conditions(self, plot_type: str) -> str:
-        min_distance_check = self._check_minimum_distance()
-        print(min_distance_check)
-        if min_distance_check != "distances okay":
-            return min_distance_check  # FALSE {I}-{J}
-
-        vectors = self._calculate_vectors()
+    def _check_vector_condition(self) -> str:
+        vectors = self._calculate_vectors()  # get 2 vectors (v01, v23)
         s, t = self._check_intersection(vectors)
 
         cos_theta = np.dot(vectors[0], vectors[1]) / (np.linalg.norm(vectors[0]) * np.linalg.norm(vectors[1]))
@@ -142,14 +136,33 @@ class FourAtomCluster(AtomClusterInterface):
             s = 10
             t = 10
 
-        condition = self._check_conditions(s, t)
-        if plot_type == "none":
-            print(condition)
-            return condition
+        condition = self._check_crossing(s, t)
+        return condition
 
-        if condition in ["not crossed", "crossed"]:
-            self._plot_points(plot_type)
-            print(condition)
-            return condition
+    def display_vector_condition(self) -> None:
+        print(self._check_vector_condition())
 
-        return "exception: unknown condition"
+    def display_distance_condition(self) -> None:
+        print(self.check_minimum_distance())
+
+    def is_possible(self) -> bool:
+        """
+        Checks if the atoms are writable by verifying two conditions:
+            1. The minimum distance between any two atoms is not less than self.min.
+            2. The atoms are not crossing each other.
+        :return: bool: True if the atoms are writable (i.e., conditions are met), False otherwise.
+        """
+        # Check the minimum distance condition
+        min_distance_check = self.check_minimum_distance(checkall=True)
+        if isinstance(min_distance_check, list):  # 距離チェックが通っている時はstr型
+            # If any pair of atoms are too close to each other, return False
+            return False
+
+        # Check the crossing condition
+        condition = self._check_vector_condition()
+        if condition == "crossed":
+            # If the atoms are crossing each other, return False
+            return False
+
+        # If none of the conditions failed, return True
+        return True

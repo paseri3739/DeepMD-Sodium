@@ -1,4 +1,5 @@
 from AtomClusterInterface import AtomClusterInterface
+from typing import Callable
 
 
 class GaussianWriter:
@@ -11,27 +12,28 @@ class GaussianWriter:
     def set_header(self, header: str = default_header) -> None:
         self.header = header
 
-    def write(
-        self, file_path, loops: int, algorithm=lambda cluster: cluster.place_atoms_in_a_plane()
-    ) -> None:  # ラムダ式で処理を実行せずに受け取る
+    # Callableを書いておくことでatom_clusterに実装されたメソッドの補完が効く。中身はラムダ式？
+    def write(self, file_path, write_times: int, algorithm: Callable[[], AtomClusterInterface]) -> None:
         if self.header is None:
             print("No header has been set.")
             return
 
         count = 0
         with open(file_path, "w") as file:
-            while count < loops:
+            while count < write_times:
                 print(f"placing trial {count}")
-                cluster = algorithm(self.atom_cluster)  # Use the passed algorithm
+                self.atom_cluster = algorithm()  # Use the specified algorithm
 
-                print(f"condition check {count}")
-                condition = cluster.check_and_report_conditions(plot_type="none")
+                # print condition
+                print(self.atom_cluster.check_minimum_distance())
+                self.atom_cluster.display_vector_condition()
 
-                if condition == "not crossed":
+                if self.atom_cluster.is_possible():
+                    print(self.atom_cluster.is_possible())
                     file.write(self.header)
                     self._write_atom_cluster(file)
                     print("cluster written")
-                    if count < loops - 1:
+                    if count < write_times - 1:
                         file.write("\n--Link1--\n")
                     count += 1  # Increment count only when condition is met
         print(f"Gaussian input file has been written to {file_path}")

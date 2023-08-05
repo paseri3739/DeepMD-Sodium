@@ -1,0 +1,62 @@
+{
+ "cells": [
+  {
+   "kind": 2,
+   "value": "r1 = 1;\nr2 = 1;\nr3 = 1;\nt1 = 0.65;\nt2 = 0.65;\np0 = {0, 0};(*点０の座標*)\np1 = {p0[[1]] + r1, p0[[2]] + 0};(*点1の座標*)\np2 = {p1[[1]] + r2 * Cos[(Pi * t1)], p1[[2]] + r2 * Sin[(Pi * t1)]};(*点2の座標*)\np3 = {p2[[1]] + r3 * Cos[(Pi * (t1 + t2))], p2[[2]] + r3 * Sin[(Pi * (t1 + t2))]};(*点3の座標*)\npoints3 = {p0, p1, p2, p3};\nv01 = p1 - p0;(*点0->点１へのベクトル*)\nv23 = p3 - p2;(*点0->点１へのベクトル*)\nresult = Solve[s * v01 == p2 + t * v23, {s, t}];(*辺0 - 1と2 - 3が交点をもつかどうかを判定する*)\nss = result[[1, 1, 2]];(*判定条件ssが0と1の間にあり*)\ntt = result[[1, 2, 2]];(*かつttが0と1の間にあると辺0 - 1と2 - 3は交わる*)\ncostheta = v01.v23 / (Norm[v01] * Norm[v23]);(*辺01と辺23が平行か否かを判定。平行だと、ss, ttが求まらないので仮にss = tt = 10とする*)\nIf[Abs[costheta]>=0.999, ss = 10;tt = 10, ];\nIf[ss>0&&ss<1&&tt>0&&tt<1, \nPrint[\"crossed\"];Return, \nIf[EuclideanDistance[p0, p3]<0.2, Print[\"False0-3\"];Return, \nIf[EuclideanDistance[p0, p2]<0.2, Print[\"False0-2\"];Return, \nIf[EuclideanDistance[p0, p2]<0.2, Print[\"False1-3\"];Return, \nGraphics[{PointSize[Small], \nPoint[points3], \nTable[Text[(i - 1), points3[[i]]], {i, Length[points3]}]}]]]]]",
+   "languageId": "wolfram",
+   "outputs": [
+    {
+     "items": [
+      {
+       "data": "<pre>False0-3\n</pre>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "\"False0-3\\n\"",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "8455b7ed-faf7-454b-a71e-605de0070b81",
+     "metadata": {
+      "cellLabel": "",
+      "isBoxData": false
+     }
+    },
+    {
+     "items": [
+      {
+       "data": "<div class=\"wexpr\"><w>Return</w></div>",
+       "mime": "x-application/wolfram-language-html"
+      },
+      {
+       "data": "Return",
+       "mime": "text/plain"
+      }
+     ],
+     "id": "cbd23f07-5867-4e37-bb7b-e4a97d42980d",
+     "metadata": {
+      "cellLabel": "Out[18]= ",
+      "isBoxData": false
+     }
+    }
+   ],
+   "metadata": {},
+   "executionSummary": {
+    "timing": {
+     "startTime": 1691116004383,
+     "endTime": 1691116006170
+    },
+    "executionOrder": 1,
+    "success": true
+   }
+  },
+  {
+   "kind": 2,
+   "value": "",
+   "languageId": "wolfram",
+   "outputs": [],
+   "metadata": {},
+   "executionSummary": {}
+  }
+ ]
+}
