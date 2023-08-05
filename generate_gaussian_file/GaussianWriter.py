@@ -24,10 +24,6 @@ class GaussianWriter:
                 print(f"placing trial {count}")
                 self.atom_cluster = algorithm()  # Use the specified algorithm
 
-                # print condition
-                print(self.atom_cluster.check_minimum_distance())
-                self.atom_cluster.display_2d_vector_condition()
-
                 if self.atom_cluster.is_possible():
                     print(self.atom_cluster.is_possible())
                     file.write(self.header)

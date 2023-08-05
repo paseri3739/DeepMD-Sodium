@@ -145,6 +145,10 @@ class FourAtomCluster(AtomClusterInterface):
     def display_distance_condition(self) -> None:
         print(self.check_minimum_distance())
 
+    def is_2d(self) -> bool:
+        z_values = [atom.coordinates[2] for atom in self.atoms]
+        return all(z == z_values[0] for z in z_values)
+
     def is_possible(self) -> bool:
         """
         Checks if the atoms are writable by verifying two conditions:
@@ -152,16 +156,18 @@ class FourAtomCluster(AtomClusterInterface):
             2. The atoms are not crossing each other.
         :return: bool: True if the atoms are writable (i.e., conditions are met), False otherwise.
         """
+
+        # if all atoms has same z coordinates (is_2d), check vector condition
+        if self.is_2d():
+            condition = self._check_2d_vector_condition()
+            if condition == "crossed":
+                # If the atoms are crossing each other, return False
+                return False
+
         # Check the minimum distance condition
         min_distance_check = self.check_minimum_distance(checkall=True)
         if isinstance(min_distance_check, list):  # 距離チェックが通っている時はstr型
             # If any pair of atoms are too close to each other, return False
-            return False
-
-        # Check the crossing condition
-        condition = self._check_2d_vector_condition()
-        if condition == "crossed":
-            # If the atoms are crossing each other, return False
             return False
 
         # If none of the conditions failed, return True

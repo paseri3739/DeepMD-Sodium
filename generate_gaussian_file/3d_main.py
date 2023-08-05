@@ -1,5 +1,5 @@
 from FourAtomCluster import FourAtomCluster
-import GaussianWriter
+from GaussianWriter import GaussianWriter
 
 if __name__ == "__main__":
     file_path = "output.com"
@@ -14,5 +14,5 @@ if __name__ == "__main__":
     atom_cluster_3d.display_distance_condition()
     atom_cluster_3d.plot_3d(line=True)
 
-    # writer = GaussianWriter(atom_cluster)
-    # writer.write(file_path, loops, algorithm=lambda cluster: atom_cluster.place_atoms_in_a_cube())
+    writer = GaussianWriter(atom_cluster_3d)
+    writer.write(file_path, loops, algorithm=atom_cluster_3d.place_atoms_in_a_cube)
