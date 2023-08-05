@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # スクリプトを実行するコマンド
-CMD [ "python", "./your_script.py" ]
+CMD ["bash"]
