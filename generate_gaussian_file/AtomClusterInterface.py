@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from Atom import Atom
 from typing import Union
+import numpy as np
 
 
 class AtomClusterInterface(ABC):
@@ -11,9 +12,15 @@ class AtomClusterInterface(ABC):
     AtomCluster is a class that represents a cluster of atoms.
     """
 
-    origin = (0.0, 0.0, 0.0)
+    origin_xyz = (0.0, 0.0, 0.0)
 
     def __init__(self, atoms: list[Atom], min: float, max: float):
+        """
+        Initializes an AtomCluster with the given atoms, minimum and maximum values.
+        :param atoms: List of Atom objects.
+        :param min: Minimum value for the system.
+        :param max: Maximum value for the system.
+        """
         self.atoms = atoms
         self.min = min
         self.max = max
@@ -22,13 +29,28 @@ class AtomClusterInterface(ABC):
 
     @classmethod
     def from_atom_name(cls, atom_name: str, count: int, min: float, max: float):
+        """
+        Creates an AtomCluster from the given atom name, count, minimum, and maximum values.
+        :param atom_name: The name of the atom.
+        :param count: The count of atoms in the cluster.
+        :param min: Minimum value for the system.
+        :param max: Maximum value for the system.
+        :return: An AtomCluster object.
+        """
         return cls([Atom.from_name(atom_name) for _ in range(count)], min, max)
 
     def display_atoms(self) -> None:
+        """
+        Prints the names and coordinates of all the atoms in the cluster.
+        """
         for i, atom in enumerate(self.atoms):
             print(f"Atom Name{i + 1}: {atom.atom_name}, Coordinates: {atom.coordinates}")
 
     def get_atoms_coordinates_by_list(self) -> list:
+        """
+        Retrieves the coordinates of all the atoms in the cluster.
+        :return: A list of coordinates for the atoms.
+        """
         return [atom.get_coordinates_as_list() for atom in self.atoms]
 
     @abstractmethod
@@ -68,6 +90,9 @@ class AtomClusterInterface(ABC):
         pass
 
     def plot_2d(self) -> None:
+        """
+        Plots the 2D projection of the atoms using matplotlib.
+        """
         points = self.get_atoms_coordinates_by_list()
         fig, ax = plt.subplots()
         # split coordinates into x and y
@@ -82,6 +107,10 @@ class AtomClusterInterface(ABC):
         plt.show()
 
     def plot_3d(self, line: bool = False) -> None:
+        """
+        Plots the 3D projection of the atoms using matplotlib.
+        :param line: Optional boolean to draw lines between points. Defaults to False.
+        """
         points = self.get_atoms_coordinates_by_list()
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
@@ -90,6 +119,14 @@ class AtomClusterInterface(ABC):
         x = [point[0] for point in points]
         y = [point[1] for point in points]
         z = [point[2] if len(point) > 2 else 0 for point in points]
+
+        # Get maximum range of the coordinates to have equal scales
+        max_range = np.array([max(x) - min(x), max(y) - min(y), max(z) - min(z)]).max() / 2.0
+
+        # Get the mean of each coordinate
+        mean_x = np.mean(x)
+        mean_y = np.mean(y)
+        mean_z = np.mean(z)
 
         # plot lines between points if line is True, otherwise just plot points
         if line:
@@ -105,4 +142,12 @@ class AtomClusterInterface(ABC):
             if len(p) == 2:
                 p.append(0)
             ax.text(p[0], p[1], p[2], atom.atom_name + str(i + 1), ha="right")  # Adding index to the atom name
+
+        # Set the limits of the plot to have equal scales
+        ax.auto_scale_xyz(
+            [mean_x - max_range, mean_x + max_range],
+            [mean_y - max_range, mean_y + max_range],
+            [mean_z - max_range, mean_z + max_range],
+        )
+
         plt.show()

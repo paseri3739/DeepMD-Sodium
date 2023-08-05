@@ -67,7 +67,7 @@ class FourAtomCluster(AtomClusterInterface):
         f = np.pi * np.random.rand()  # Multiply pi directly here
 
         # Generate points
-        p0 = np.array(AtomClusterInterface.origin)  # Changed from p1 to p0
+        p0 = np.array(AtomClusterInterface.origin_xyz)  # Changed from p1 to p0
         p1 = np.array([-r[0] * np.sin(t[0]), 0, -r[0] * np.cos(t[0])])  # Changed from p0 to p1
         p2 = np.array([0, 0, r[1]])
         p33 = np.array(
@@ -145,7 +145,7 @@ class FourAtomCluster(AtomClusterInterface):
     def display_distance_condition(self) -> None:
         print(self.check_minimum_distance())
 
-    def is_2d(self) -> bool:
+    def _is_2d(self) -> bool:
         z_values = [atom.coordinates[2] for atom in self.atoms]
         return all(z == z_values[0] for z in z_values)
 
@@ -158,7 +158,7 @@ class FourAtomCluster(AtomClusterInterface):
         """
 
         # if all atoms has same z coordinates (is_2d), check vector condition
-        if self.is_2d():
+        if self._is_2d():
             condition = self._check_2d_vector_condition()
             if condition == "crossed":
                 # If the atoms are crossing each other, return False

@@ -4,6 +4,7 @@ import re
 import sys
 import argparse
 import math
+import numpy as np
 
 # Regular expression pattern for matching atomic coordinates
 PATTERN = r"([A-Za-z]{1,2})\s+([-\d\.]+)\s+([-\d\.]+)\s+([-\d\.]+)"
@@ -76,8 +77,23 @@ def plot_3d_molecule(ax, molecule, index):
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
 
+    # Get maximum range of the coordinates to have equal scales
+    max_range = np.array([max(x) - min(x), max(y) - min(y), max(z) - min(z)]).max() / 2.0
 
-def plot_molecules(molecules, plot_type):
+    # Get the mean of each coordinate
+    mean_x = np.mean(x)
+    mean_y = np.mean(y)
+    mean_z = np.mean(z)
+
+    # Set the limits of the plot to have equal scales
+    ax.auto_scale_xyz(
+        [mean_x - max_range, mean_x + max_range],
+        [mean_y - max_range, mean_y + max_range],
+        [mean_z - max_range, mean_z + max_range],
+    )
+
+
+def plot_2d_molecules(molecules, plot_type):
     n = get_plot_dimensions(len(molecules))
     fig, axs = plt.subplots(
         n, n, figsize=(5 * n, 5 * n), subplot_kw={"projection": "3d" if plot_type == "3d" else None}
@@ -108,7 +124,7 @@ def parse_arguments():
 def main():
     args = parse_arguments()
     molecules = parse_gaussian_file(args.filename)
-    plot_molecules(molecules, args.plot)
+    plot_2d_molecules(molecules, args.plot)
 
 
 if __name__ == "__main__":
