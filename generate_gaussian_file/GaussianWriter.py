@@ -26,7 +26,7 @@ class GaussianWriter:
 
                 # print condition
                 print(self.atom_cluster.check_minimum_distance())
-                self.atom_cluster.display_vector_condition()
+                self.atom_cluster.display_2d_vector_condition()
 
                 if self.atom_cluster.is_possible():
                     print(self.atom_cluster.is_possible())

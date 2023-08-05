@@ -127,7 +127,7 @@ class FourAtomCluster(AtomClusterInterface):
         else:
             return "not crossed"
 
-    def _check_vector_condition(self) -> str:
+    def _check_2d_vector_condition(self) -> str:
         vectors = self._calculate_vectors()  # get 2 vectors (v01, v23)
         s, t = self._check_intersection(vectors)
 
@@ -139,8 +139,8 @@ class FourAtomCluster(AtomClusterInterface):
         condition = self._check_crossing(s, t)
         return condition
 
-    def display_vector_condition(self) -> None:
-        print(self._check_vector_condition())
+    def display_2d_vector_condition(self) -> None:
+        print(self._check_2d_vector_condition())
 
     def display_distance_condition(self) -> None:
         print(self.check_minimum_distance())
@@ -159,7 +159,7 @@ class FourAtomCluster(AtomClusterInterface):
             return False
 
         # Check the crossing condition
-        condition = self._check_vector_condition()
+        condition = self._check_2d_vector_condition()
         if condition == "crossed":
             # If the atoms are crossing each other, return False
             return False

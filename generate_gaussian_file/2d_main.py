@@ -11,7 +11,7 @@ if __name__ == "__main__":
     atom_cluster = FourAtomCluster.from_atom_name(atom_name="Na", count=4, min=minimum_distance, max=max_distance)
 
     # リファクタリングによりメソッドチェーンによる記述が可能となった
-    atom_cluster.place_atoms_in_a_plane().display_vector_condition()
+    atom_cluster.place_atoms_in_a_plane().display_2d_vector_condition()
     atom_cluster.check_minimum_distance(checkall=True)
     atom_cluster.display_distance_condition()
     atom_cluster.display_atoms()

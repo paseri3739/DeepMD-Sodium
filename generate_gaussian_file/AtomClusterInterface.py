@@ -60,7 +60,7 @@ class AtomClusterInterface(ABC):
         pass
 
     @abstractmethod
-    def display_vector_condition(self) -> None:
+    def display_2d_vector_condition(self) -> None:
         pass
 
     @abstractmethod
