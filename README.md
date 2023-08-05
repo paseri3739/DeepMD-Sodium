@@ -15,7 +15,10 @@ FourAtomCluster型は、4つのAtom型リストに特化した型として定義
 これらのクラスをimportしてmainで呼び出すことにより必要に応じて座標の配置、可視化、そして配置した座標をもとに原子間距離とグラフの交差を基準にして実現可能性のある原子配置をGaussian用の計算ファイルに必要な数だけ書き込むことができる。
 
 # インストールと実行
-インストールはDockerイメージにより簡単に行うことができる。requirements.txtを参照して直接パッケージをインストールして実行することも可能。docker runコマンドで仮想のコンソールに入り、そこからpythonを起動することができる。(現在構築中)
+インストールはDockerイメージにより簡単に行うことができる。requirements.txtを参照して直接パッケージをインストールして実行することも可能。docker runコマンドで仮想のコンソールに入り、そこからpythonを起動することができる。
+cdしたのち、
+docker build -t your_image_name .
+docker run -it --rm <your_image_name>
 # 後処理用スクリプトの説明:
 
 # split_gaussian.py
