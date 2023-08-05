@@ -18,6 +18,7 @@ FourAtomCluster型は、4つのAtom型リストに特化した型として定義
 インストールはDockerイメージにより簡単に行うことができる。requirements.txtを参照して直接パッケージをインストールして実行することも可能。docker runコマンドで仮想のコンソールに入り、そこからpythonを起動することができる。
 cdしたのち、
 docker build -t your_image_name .
+docker imagesで作成したイメージがあることを確認し、
 docker run -it --rm <your_image_name>
 # 後処理用スクリプトの説明:
 
