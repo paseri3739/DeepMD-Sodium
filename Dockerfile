@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # スクリプトをイメージにコピー
 COPY . .
 
-# スクリプトを実行するコマンド
-CMD ["bash"]
+# シェルを立ち上げる
+ENTRYPOINT ["/bin/bash"]
