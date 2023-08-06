@@ -20,6 +20,10 @@ cdしたのち、
 docker build -t your_image_name .
 docker imagesで作成したイメージがあることを確認し、
 docker run -it --rm <your_image_name>
+
+またはinstall用のシェルスクリプト、batファイルを実行して仮想環境が作成されたことを確認した後
+source randomcoords/bin/activate
+のようにして仮想環境に入ることができる。
 # 後処理用スクリプトの説明:
 
 # split_gaussian.py
