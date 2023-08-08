@@ -7,6 +7,6 @@ if [ -z "$1" ]; then
 fi
 
 python3 ./generate_gaussian_file/generate_gaussian_file.py "$1"
-g16 <output.com >output.log
+g16 <output.com> output.log
 python3 ./postprocess/split_gaussian.py output.log
 python3 ./postprocess/import_gaussian_from_dir.py splited
