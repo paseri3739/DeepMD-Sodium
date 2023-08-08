@@ -32,7 +32,7 @@ class GaussianWriter:
                     if count < write_times - 1:
                         file.write("\n--Link1--\n")
                     count += 1  # Increment count only when condition is met
-                file.write("\n")
+                file.write("\n")  # add a new line the end of the file
         print(f"Gaussian input file has been written to {file_path}")
 
     def _write_atom_cluster(self, file) -> None:

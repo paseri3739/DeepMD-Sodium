@@ -25,7 +25,7 @@ cdしたのち、
 `docker run -it --rm <your_image_name>`
 
 またはinstall用のシェルスクリプト、batファイルを実行して仮想環境が作成されたことを確認した後
-`source randomcoords/bin/activate`
+`source venv/bin/activate` (Unixの場合,Winはバックスラッシュ)
 のようにして仮想環境に入ることができる。(仮想環境の名前はシェルスクリプトかbatファイルを直接編集して変更できる)
 # 後処理用スクリプトの説明:
 

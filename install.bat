@@ -1,5 +1,5 @@
 @echo off
 
-python -m venv randomcoords
-call randomcoords\Scripts\activate.bat
+python -m venv venv
+call venv\Scripts\activate.bat
 pip install -r requirements.txt

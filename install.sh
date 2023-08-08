@@ -1,5 +1,5 @@
 #!/bin/bash
 
-python3 -m venv randomcoords
-source randomcoords/bin/activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
