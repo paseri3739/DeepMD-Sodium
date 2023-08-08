@@ -12,7 +12,9 @@ if __name__ == "__main__":
     file_path = "output.com"
     loops = sys.argv[1]
 
-    if type(loops) is not int:
+    try:
+        loops = int(sys.argv[1])
+    except ValueError:
         print(f"Usage: {sys.argv[0]} <loop times to generate>")
         print("loops must be an integer")
         sys.exit(1)
