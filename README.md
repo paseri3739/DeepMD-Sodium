@@ -15,27 +15,33 @@ FourAtomCluster型は、4つのAtom型リストに特化した型として定義
 これらのクラスをimportしてmainで呼び出すことにより必要に応じて座標の配置、可視化、そして配置した座標をもとに原子間距離とグラフの交差を基準にして実現可能性のある原子配置をGaussian用の計算ファイルに必要な数だけ書き込むことができる。
 
 # インストールと実行
-インストールはDockerイメージにより簡単に行うことができる。requirements.txtを参照して直接パッケージをインストールして実行することも可能。`docker run`コマンドで仮想のコンソールに入り、そこからpythonを起動することができる。
+インストールはDockerイメージにより簡単に行うことができる。requirements.txtを参照して直接パッケージをインストールして実行することも可能。`docker run`
+コマンドで仮想のコンソールに入り、そこからpythonを起動することができる。
 cdしたのち、
 `docker build -t your_image_name .`
-`docker images`で作成したイメージがあることを確認し、
+でイメージを作成して
+`docker images`
+で作成したイメージがあることを確認し、
 `docker run -it --rm <your_image_name>`
 
 またはinstall用のシェルスクリプト、batファイルを実行して仮想環境が作成されたことを確認した後
 `source randomcoords/bin/activate`
-のようにして仮想環境に入ることができる。
+のようにして仮想環境に入ることができる。(仮想環境の名前はシェルスクリプトかbatファイルを直接編集して変更できる)
 # 後処理用スクリプトの説明:
 
 # split_gaussian.py
 
-`python split_gaussian.py <logファイルのpath>` でlogファイルを1つの計算毎にsplitedディレクトリに分割して格納する。これはdeepmd-kit学習用ファイルを作成するためのdpdataが、複数の計算を格納したlogファイルのインポートに対応していないため、分割して1つのディレクトリに格納し、そのディレクトリを読み込む必要があるためである。
+`python split_gaussian.py <logファイルのpath>`
+でlogファイルを1つの計算毎にsplitedディレクトリに分割して格納する。これはdeepmd-kit学習用ファイルを作成するためのdpdataが、複数の計算を格納したlogファイルのインポートに対応していないため、分割して1つのディレクトリに格納し、そのディレクトリを読み込む必要があるためである。
 
 # import_gaussian_from_dir.py
 
-`python import_gaussian_from_dir.py <splitedディレクトリのpath>` で複数のlogファイルをdpdataによりインポートしてdeepmd-kit学習用のrawファイルを生成する。
+`python import_gaussian_from_dir.py <splitedディレクトリのpath>`
+で複数のlogファイルをdpdataによりインポートしてdeepmd-kit学習用のrawファイルを生成する。
 
 # plot_from_gaussian.py
 
-`python plot_from_gaussian.py <--plot=2d> </path/to/gaussian.com>`  でgaussian.comの出力をデフォルトでは3次元プロットする。
+`python plot_from_gaussian.py <--plot=2d> </path/to/gaussian.com>`
+でgaussian.comの出力をデフォルトでは3次元プロットする。
 コマンドライン引数を指定すると2dプロットにすることができる。二次元での計算が保証されている場合に利用する。x,y,zの縮尺は1:1:1になるように固定している。
 
