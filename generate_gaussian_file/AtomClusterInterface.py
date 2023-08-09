@@ -106,7 +106,7 @@ class AtomClusterInterface(ABC):
         ax.set_aspect("equal", "box")  # Set the aspect of the plot to 1:1
         plt.show()
 
-    def plot_3d(self, line: bool = False) -> None:
+    def plot_3d(self, line: bool = True) -> None:
         """
         Plots the 3D projection of the atoms using matplotlib.
         :param line: Optional boolean to draw lines between points. Defaults to False.
