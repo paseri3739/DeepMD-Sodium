@@ -3,13 +3,15 @@ from typing import Callable
 
 
 class GaussianWriter:
-    default_header: str = "%NProcShared=16\n%mem=12GB\n%Chk=checkpoint.chk\n#p B3LYP/6-311+g(d) force\n\nTest\n\n0 1\n"
-
     def __init__(self, atom_cluster: AtomClusterInterface):
-        self.header = self.default_header
         self.atom_cluster = atom_cluster
+        self.header = self.generate_header(atom_cluster.min, atom_cluster.max)
 
-    def set_header(self, header: str = default_header) -> None:
+    @staticmethod
+    def generate_header(min_distance: float, max_distance: float) -> str:
+        return f"%NProcShared=16\n%mem=12GB\n%Chk=checkpoint.chk\n#p B3LYP/6-311+g(d) force\n\n!min_dist: {min_distance} max_dist: {max_distance}\n\n0 1\n"
+
+    def set_header(self, header: str) -> None:
         self.header = header
 
     # Callableを書いておくことでatom_clusterに実装されたメソッドの補完が効く。中身はラムダ式？
