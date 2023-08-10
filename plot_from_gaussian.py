@@ -66,7 +66,11 @@ def _plot_molecule(ax: plt.Axes, molecule, index: int, plot_type: str) -> None:
         raise ValueError(f"Unsupported plot_type: {plot_type}")
 
     for j in range(len(x)):
-        ax.text(x[j], y[j], f"{atoms[j]}{j + 1}", color="green", fontsize=12)
+        if plot_type == "3d":
+            ax.text(x[j], y[j], z[j], f"{atoms[j]}{j + 1}", color="green", fontsize=12)
+        else:
+            ax.text(x[j], y[j], f"{atoms[j]}{j + 1}", color="green", fontsize=12)
+
     ax.set_title(f"Cluster {index+1}")
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
