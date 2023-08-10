@@ -5,9 +5,11 @@ import argparse
 import math
 import numpy as np
 from typing import Optional
-from generate_gaussian_file import *
+from Atom import Atom
+from GeneralAtomCluster import GeneralAtomCluster
 
-# Regular expression pattern for matching atomic coordinates
+# Regular expression pattern for matching atomic coordinates. plz ask chatgpt if you don't understand
+# each () is grouping. Name, x, y, z
 PATTERN = r"([A-Za-z]{1,2})\s+([-\d\.]+)\s+([-\d\.]+)\s+([-\d\.]+)"
 
 
@@ -15,12 +17,21 @@ def _match_coordinates(line: str) -> Optional[re.Match]:
     return re.match(PATTERN, line)
 
 
-def _parse_line(line: str) -> Optional[tuple[str, float, float, float]]:
+def _parse_line_and_make_atom(line: str) -> Optional[Atom]:
     match = _match_coordinates(line)
     if match:  # not None
         atom, x, y, z = match.groups()
         x, y, z = map(float, [x, y, z])
-        return (atom, x, y, z)
+        return Atom(atom, [x, y, z])
+    return None
+
+
+def extract_min_max_from_line(line: str) -> Optional[tuple[float, float]]:
+    pattern = r"!min_dist:\s*(\d+\.\d+)\s*max_dist:\s*(\d+\.\d+)"
+    match = re.match(pattern, line)
+    if match:
+        min_dist, max_dist = map(float, match.groups())
+        return min_dist, max_dist
     return None
 
 
@@ -28,24 +39,32 @@ def _is_new_molecule(line: str) -> bool:
     return line.startswith("--Link1--")
 
 
-def parse_gaussian_file(filename: str) -> list[list[tuple[str, float, float, float]]]:
-    molecules = []
-    molecule = []
+def parse_gaussian_file(filename: str) -> list[GeneralAtomCluster]:
+    clusters = []
 
     with open(filename, "r") as file:
-        for line in file:  # ここで直接ファイルから行を読み込む
-            coord = _parse_line(line)
-            if coord:
-                molecule.append(coord)
+        atoms = []
+        min_val, max_val = None, None  # これをデフォルト値として設定
+
+        for line in file:
+            # max, minの情報を取得する
+            if line.startswith("!min_dist"):
+                min_val, max_val = extract_min_max_from_line(line)
+                continue
+
+            atom = _parse_line_and_make_atom(line)
+            if atom:
+                atoms.append(atom)
             elif _is_new_molecule(line):
-                molecules.append(molecule)
-                molecule = []
+                if atoms and min_val is not None and max_val is not None:
+                    clusters.append(GeneralAtomCluster(atoms, min_val, max_val))
+                    atoms = []
+                    min_val, max_val = None, None  # 値をリセット
 
-    # 最後の分子を追加する（存在する場合）
-    if molecule:
-        molecules.append(molecule)
+        if atoms and min_val is not None and max_val is not None:
+            clusters.append(GeneralAtomCluster(atoms, min_val, max_val))
 
-    return molecules
+    return clusters
 
 
 # get grid size to export
@@ -53,48 +72,22 @@ def _get_plot_dimensions(num_molecules: int) -> int:
     return int(math.ceil(math.sqrt(num_molecules)))
 
 
-def _plot_molecule(ax: plt.Axes, molecule, index: int, plot_type: str) -> None:
-    atoms, x, y, z = zip(*molecule)
+def plot_molecules(clusters: list[GeneralAtomCluster], plot_type: str, show_plot: bool = False) -> None:
+    if not clusters:
+        return
 
-    if plot_type == "3d":
-        ax.plot(x + x[:1], y + y[:1], z + z[:1], color="blue")
-        ax.scatter(x, y, z, color="red", s=100)
-    elif plot_type == "2d":
-        ax.plot(x + x[:1], y + y[:1], color="blue")
-        ax.scatter(x, y, color="red", s=100)
-    else:
-        raise ValueError(f"Unsupported plot_type: {plot_type}")
+    n = _get_plot_dimensions(len(clusters))
+    fig, axs = plt.subplots(n, n, figsize=(5 * n, 5 * n))
 
-    for j in range(len(x)):
-        ax.text(x[j], y[j], f"{atoms[j]}{j + 1}", color="green", fontsize=12)
-    ax.set_title(f"Cluster {index+1}")
-    ax.set_xlabel("X")
-    ax.set_ylabel("Y")
-
-    # Only for 3D plots. format axis length to 1:1:1
-    if plot_type == "3d":
-        ax.set_zlabel("Z")
-
-        max_range = np.array([max(x) - min(x), max(y) - min(y), max(z) - min(z)]).max() / 2.0
-        mean_x, mean_y, mean_z = np.mean(x), np.mean(y), np.mean(z)
-        ax.auto_scale_xyz(
-            [mean_x - max_range, mean_x + max_range],
-            [mean_y - max_range, mean_y + max_range],
-            [mean_z - max_range, mean_z + max_range],
-        )
-
-
-def plot_molecules(molecules, plot_type: str, show_plot: bool = False) -> None:
-    n = _get_plot_dimensions(len(molecules))
-    fig, axs = plt.subplots(
-        n, n, figsize=(5 * n, 5 * n), subplot_kw={"projection": "3d" if plot_type == "3d" else None}
-    )
-
-    for i, ax in enumerate(axs.flat):
-        if i < len(molecules):
-            _plot_molecule(ax, molecules[i], i, plot_type)
+    for i, cluster in enumerate(clusters):
+        ax = axs.flat[i]
+        if plot_type == "3d":
+            ax = cluster.plot_3d(show=False)
         else:
-            ax.axis("off")
+            ax = cluster.plot_2d(show=False)
+        ax.figure = fig  # Update the figure associated with the Axes
+        fig.axes.append(ax)  # Manually add Axes to the figure
+        fig.add_axes(ax)  # More formally add the Axes
 
     plt.tight_layout()
     plt.savefig("output.png")

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from Atom import Atom
-from typing import Union
+from typing import Union, Optional
 import numpy as np
 
 
@@ -89,65 +89,49 @@ class AtomClusterInterface(ABC):
     def display_distance_condition(self) -> None:
         pass
 
-    def plot_2d(self) -> None:
-        """
-        Plots the 2D projection of the atoms using matplotlib.
-        """
+    def plot_2d(self, show: bool = True) -> Optional[plt.Axes]:
         points = self.get_atoms_coordinates_by_list()
         fig, ax = plt.subplots()
-        # split coordinates into x and y
         x = [point[0] for point in points]
         y = [point[1] for point in points]
-        ax.plot(x + [x[0]], y + [y[0]], marker="o")  # Adding the first point to the end to create a closed loop
+        ax.plot(x + [x[0]], y + [y[0]], marker="o")
         for i, atom in enumerate(self.atoms):
-            ax.text(
-                points[i][0], points[i][1], atom.atom_name + str(i + 1), ha="right"
-            )  # Adding index to the atom name
-        ax.set_aspect("equal", "box")  # Set the aspect of the plot to 1:1
-        plt.show()
+            ax.text(points[i][0], points[i][1], atom.atom_name + str(i + 1), ha="right")
+        ax.set_aspect("equal", "box")
 
-    def plot_3d(self, line: bool = True) -> None:
-        """
-        Plots the 3D projection of the atoms using matplotlib.
-        :param line: Optional boolean to draw lines between points. Defaults to False.
-        """
+        if show:
+            plt.show()
+            return None
+        else:
+            return ax
+
+    def plot_3d(self, show: bool = True) -> Optional[plt.Axes3D]:
         points = self.get_atoms_coordinates_by_list()
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
-
-        # split coordinates into x, y and add z=0 if not present
         x = [point[0] for point in points]
         y = [point[1] for point in points]
         z = [point[2] if len(point) > 2 else 0 for point in points]
 
-        # Get maximum range of the coordinates to have equal scales
         max_range = np.array([max(x) - min(x), max(y) - min(y), max(z) - min(z)]).max() / 2.0
+        mean_x, mean_y, mean_z = np.mean(x), np.mean(y), np.mean(z)
 
-        # Get the mean of each coordinate
-        mean_x = np.mean(x)
-        mean_y = np.mean(y)
-        mean_z = np.mean(z)
-
-        # plot lines between points if line is True, otherwise just plot points
-        if line:
-            ax.plot(
-                x + [x[0]], y + [y[0]], z + [z[0]], marker="o"
-            )  # Adding the first point to the end to create a closed loop
-        else:
-            ax.scatter(x, y, z, marker="o")
+        ax.plot(x + [x[0]], y + [y[0]], z + [z[0]], marker="o")
 
         for i, atom in enumerate(self.atoms):
-            # Add a default z=0 coordinate if not present
             p = list(points[i])
             if len(p) == 2:
                 p.append(0)
-            ax.text(p[0], p[1], p[2], atom.atom_name + str(i + 1), ha="right")  # Adding index to the atom name
+            ax.text(p[0], p[1], p[2], atom.atom_name + str(i + 1), ha="right")
 
-        # Set the limits of the plot to have equal scales
         ax.auto_scale_xyz(
             [mean_x - max_range, mean_x + max_range],
             [mean_y - max_range, mean_y + max_range],
             [mean_z - max_range, mean_z + max_range],
         )
 
-        plt.show()
+        if show:
+            plt.show()
+            return None
+        else:
+            return ax
