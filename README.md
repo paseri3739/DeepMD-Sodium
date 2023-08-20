@@ -12,11 +12,14 @@ AtomClusterInterfaceはAtomのリストをもつ。GeneralAtomCluster, FourAtomC
 GeneralAtomClusterはAtomClusterInterfaceを継承し、将来的にN原子系に対応する。
 FourAtomCluster型は、4つのAtom型リストに特化した型として定義した。これにより一般のN原子系のルーチンと分け、呼び出し元はAtomClusterInterfaceを参照するようにすることで将来的な保守性を高めるように設計した。
 
-これらのクラスをimportしてmainで呼び出すことにより必要に応じて座標の配置、可視化、そして配置した座標をもとに原子間距離とグラフの交差を基準にして実現可能性のある原子配置をGaussian用の計算ファイルに必要な数だけ書き込むことができる。
+これらのクラスをgenerate_gaussian_fileパッケージからimportしてmainプログラムを作成することで必要に応じて座標の配置、可視化、そして配置した座標をもとに原子間距離とグラフの交差を基準にして実現可能性のある原子配置をGaussian用の計算ファイルに必要な数だけ書き込むことができる。
+`/generate_gaussian_file/generate_gaussian_file.py <number to loop>`
+で3次元の配置を行う。
 
 # インストールと実行
 インストールはDockerイメージにより簡単に行うことができる。requirements.txtを参照して直接パッケージをインストールして実行することも可能。`docker run`
-コマンドで仮想のコンソールに入り、そこからpythonを起動することができる。
+コマンドで仮想のコンソールに入り、そこからpythonを起動することができる。イメージ作成手順は以下。
+
 cdしたのち、
 `docker build -t your_image_name .`
 でイメージを作成して
