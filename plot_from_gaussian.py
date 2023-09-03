@@ -106,6 +106,14 @@ def plot_molecules(molecules, plot_type: str, show_plot: bool = False) -> None:
         plt.show()
 
 
+def plot_molecules_partial(axs, molecules, start_index: int, plot_type: str) -> None:
+    for i, ax in enumerate(axs.flat):
+        if i < len(molecules):
+            _plot_molecule(ax, molecules[i], start_index + i, plot_type)
+        else:
+            ax.axis("off")
+
+
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
@@ -114,10 +122,54 @@ def parse_arguments() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def initialize_plot_grid(plot_type: str, grid_size: int = 10) -> plt.Figure:
+    n = _get_plot_dimensions(grid_size)
+    fig, axs = plt.subplots(
+        n, n, figsize=(5 * n, 5 * n), subplot_kw={"projection": "3d" if plot_type == "3d" else None}
+    )
+    return fig, axs
+
+
+def process_and_plot_molecules(file, plot_type: str, show: bool, batch_size: int = 100):
+    num_molecules = 0
+    molecules_buffer = []
+    molecule = []
+
+    fig, axs = initialize_plot_grid(plot_type, batch_size)
+
+    for line in file:
+        coord = _parse_line(line)
+        if coord:
+            molecule.append(coord)
+        elif _is_new_molecule(line):
+            molecules_buffer.append(molecule)
+            molecule = []
+            num_molecules += 1
+
+            if len(molecules_buffer) == batch_size:
+                plot_and_save_batch(axs, molecules_buffer, num_molecules - batch_size, plot_type)
+                molecules_buffer = []
+                fig, axs = initialize_plot_grid(plot_type, batch_size)
+
+    if molecules_buffer:
+        plot_and_save_batch(axs, molecules_buffer, num_molecules - len(molecules_buffer), plot_type)
+
+    if show:
+        plt.show()
+
+
+def plot_and_save_batch(axs, molecules_buffer, start_index: int, plot_type: str):
+    plot_molecules_partial(axs, molecules_buffer, start_index, plot_type)
+    plt.tight_layout()
+    plt.savefig(f"output_{(start_index // 100) + 1}.png")
+    plt.clf()
+
+
 def main() -> None:
-    args = parse_arguments()
-    molecules = parse_gaussian_file(args.filename)
-    plot_molecules(molecules, args.plot, args.show)
+    args = parse_arguments()  # Your argument parser here
+
+    with open(args.filename, "r") as file:
+        process_and_plot_molecules(file, args.plot, args.show)
 
 
 if __name__ == "__main__":
