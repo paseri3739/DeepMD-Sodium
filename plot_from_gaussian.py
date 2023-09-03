@@ -88,24 +88,6 @@ def _plot_molecule(ax: plt.Axes, molecule, index: int, plot_type: str) -> None:
         )
 
 
-def plot_molecules(molecules, plot_type: str, show_plot: bool = False) -> None:
-    n = _get_plot_dimensions(len(molecules))
-    fig, axs = plt.subplots(
-        n, n, figsize=(5 * n, 5 * n), subplot_kw={"projection": "3d" if plot_type == "3d" else None}
-    )
-
-    for i, ax in enumerate(axs.flat):
-        if i < len(molecules):
-            _plot_molecule(ax, molecules[i], i, plot_type)
-        else:
-            ax.axis("off")
-
-    plt.tight_layout()
-    plt.savefig("output.png")
-    if show_plot:
-        plt.show()
-
-
 def plot_molecules_partial(axs, molecules, start_index: int, plot_type: str) -> None:
     for i, ax in enumerate(axs.flat):
         if i < len(molecules):
