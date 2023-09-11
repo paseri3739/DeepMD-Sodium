@@ -1,28 +1,24 @@
 #!/bin/bash
 
-# if $1 is none, exit 1
+# if $1 (loop times) or $2 (dimension) is none, exit 1
 if [ -z "$1" ]; then
     echo "No loop times specified"
     exit 1
 fi
 
-# if $2 is none, exit 1
 if [ -z "$2" ]; then
     echo "No dimension specified"
     exit 1
 fi
 
-# Generate the Gaussian input file based on loop times and dimension
+# Run the Python script to generate Gaussian input
 python3 ./generate_gaussian_file/generate_gaussian_file.py "$1" "$2"
 
-# Dynamically set the Gaussian input and output file names based on the dimension
-input_file="output_${2}.com"
-output_file="output_${2}.log"
-
+# Run the Gaussian simulation
 echo "Gaussian Launching..."
-g16 <"$input_file"> "$output_file"
+g16 < "output_${2}.com" > "output_${2}.log"
 echo "Gaussian Done"
 
-# Execute post-processing steps
-python3 ./postprocess/split_gaussian.py "$output_file"
-python3 ./postprocess/import_gaussian_from_dir.py splited
+# Run the Python scripts for post-processing
+python3 ./postprocess/split_gaussian.py "output_${2}.log" "$2"
+python3 ./postprocess/import_gaussian_from_dir.py "splited/${2}_set_1"  # Assuming you want to process the latest set
