@@ -9,9 +9,9 @@ if __name__ == "__main__":
         print(f"Usage: {sys.argv[0]} <loop times to generate> <dimension>")
         sys.exit(1)
 
-    file_path = "output.com"
     loops = sys.argv[1]
     dimension = sys.argv[2]
+    file_path = f"output_{dimension}.com"
 
     try:
         loops = int(sys.argv[1])
