@@ -5,12 +5,13 @@ import sys
 if __name__ == "__main__":
     # Check the number of arguments. This must be in the header so that the
     # help message is printed if the user provides no arguments.
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <loop times to generate>")
+    if len(sys.argv) != 4:
+        print(f"Usage: {sys.argv[0]} <loop times to generate> <dimension>")
         sys.exit(1)
 
     file_path = "output.com"
     loops = sys.argv[1]
+    dimension = sys.argv[2]
 
     try:
         loops = int(sys.argv[1])
@@ -22,6 +23,19 @@ if __name__ == "__main__":
     minimum_distance = 2.2
     max_distance = 5.8
     # 4つの異なるAtomインスタンスをNaとして作成。最短距離と最長距離を指定。
-    atom_cluster_3d = FourAtomCluster.from_atom_name(atom_name="Na", count=4, min=minimum_distance, max=max_distance)
-    writer = GaussianWriter(atom_cluster_3d)
-    writer.write(file_path, loops, algorithm=atom_cluster_3d.place_atoms_in_a_cube)
+    atom_cluster = FourAtomCluster.from_atom_name(atom_name="Na", count=4, min=minimum_distance, max=max_distance)
+    writer = GaussianWriter(atom_cluster)
+
+    algorithm_map = {
+        "1d": atom_cluster.place_atoms_in_a_line,
+        "2d": atom_cluster.place_atoms_in_a_plane,
+        "3d": atom_cluster.place_atoms_in_a_cube,
+    }
+
+    algorithm = algorithm_map.get(dimension)
+
+    if algorithm is None:
+        print(f"Invalid dimension: {dimension}. Must be '1d', '2d', or '3d'.")
+        sys.exit(1)
+
+    writer.write(file_path, loops, algorithm=algorithm)
