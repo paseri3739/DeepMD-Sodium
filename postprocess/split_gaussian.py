@@ -11,6 +11,9 @@ if len(sys.argv) != 3:
 input_file = sys.argv[1]
 dimension = sys.argv[2]
 base_output_dir = "splited"
+# Create the base output directory if it does not exist
+if not os.path.exists(base_output_dir):
+    os.makedirs(base_output_dir)
 counter = 0
 
 # Check if the input file exists

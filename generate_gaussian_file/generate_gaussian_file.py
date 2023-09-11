@@ -3,9 +3,10 @@ from GaussianWriter import GaussianWriter
 import sys
 
 if __name__ == "__main__":
+    print("Arguments received:", sys.argv)
     # Check the number of arguments. This must be in the header so that the
     # help message is printed if the user provides no arguments.
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 3:
         print(f"Usage: {sys.argv[0]} <loop times to generate> <dimension>")
         sys.exit(1)
 

@@ -11,8 +11,9 @@ if [ -z "$2" ]; then
     exit 1
 fi
 
-# Run the Python script to generate Gaussian input
+echo "Running Python script with: $1 $2"
 python3 ./generate_gaussian_file/generate_gaussian_file.py "$1" "$2"
+
 
 # Run the Gaussian simulation
 echo "Gaussian Launching..."
