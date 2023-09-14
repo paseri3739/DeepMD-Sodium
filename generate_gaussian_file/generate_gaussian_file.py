@@ -2,6 +2,7 @@ from FourAtomCluster import FourAtomCluster
 from GaussianWriter import GaussianWriter
 import sys
 import os
+import re
 
 if __name__ == "__main__":
     print("Arguments received:", sys.argv)
@@ -10,20 +11,25 @@ if __name__ == "__main__":
         print(f"Usage: {sys.argv[0]} <loop times to generate> <dimension>")
         sys.exit(1)
 
-    loops = sys.argv[1]
+    loops = int(sys.argv[1])
     dimension = sys.argv[2]
-
-    # ディレクトリを作成
     directory_path = f"./comfile/{dimension}/"
+
     if not os.path.exists(directory_path):
         os.makedirs(directory_path)
 
-    try:
-        loops = int(sys.argv[1])
-    except ValueError:
-        print(f"Usage: {sys.argv[0]} <loop times to generate>")
-        print("loops must be an integer")
-        sys.exit(1)
+    def get_next_file_number():
+        """Get the next file number based on existing files in the directory."""
+        files = os.listdir(directory_path)
+        pattern = re.compile(rf"output_{dimension}_(\d+).com")
+        max_number = 0
+        for file in files:
+            match = pattern.match(file)
+            if match:
+                max_number = max(max_number, int(match.group(1)))
+        return max_number + 1
+
+    start_counter = get_next_file_number()
 
     minimum_distance = 2.2
     max_distance = 5.8
@@ -37,13 +43,11 @@ if __name__ == "__main__":
     }
 
     algorithm = algorithm_map.get(dimension)
-
     if algorithm is None:
         print(f"Invalid dimension: {dimension}. Must be '1d', '2d', or '3d'.")
         sys.exit(1)
 
-    for counter in range(1, loops + 1):
-        # ファイルパスと命名規則を変更
-        file_path = f"{directory_path}output_{dimension}_{counter}.com"
-        writer.write(file_path, loops, algorithm=algorithm)
-        print(f"{file_path} successfully generated.")
+    counter = get_next_file_number()
+    file_path = f"{directory_path}output_{dimension}_{counter}.com"
+    writer.write(file_path, loops, algorithm=algorithm)
+    print(f"{file_path} successfully generated.")
