@@ -15,7 +15,7 @@ class GaussianWriter:
         self.header = header
 
     # Callableを書いておくことでatom_clusterに実装されたメソッドの補完が効く。中身はラムダ式？
-    def write(self, file_path, write_times: int, algorithm: Callable[[], AtomClusterInterface]) -> None:
+    def write(self, file_path: str, write_times: int, algorithm: Callable[[], AtomClusterInterface]) -> None:
         if self.header is None:
             print("No header has been set.")
             return
