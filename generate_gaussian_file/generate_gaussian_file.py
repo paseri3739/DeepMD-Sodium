@@ -1,18 +1,22 @@
 from FourAtomCluster import FourAtomCluster
 from GaussianWriter import GaussianWriter
 import sys
+import os
 
 if __name__ == "__main__":
     print("Arguments received:", sys.argv)
-    # Check the number of arguments. This must be in the header so that the
-    # help message is printed if the user provides no arguments.
+
     if len(sys.argv) != 3:
         print(f"Usage: {sys.argv[0]} <loop times to generate> <dimension>")
         sys.exit(1)
 
     loops = sys.argv[1]
     dimension = sys.argv[2]
-    file_path = f"output_{dimension}.com"
+
+    # ディレクトリを作成
+    directory_path = f"./comfile/{dimension}/"
+    if not os.path.exists(directory_path):
+        os.makedirs(directory_path)
 
     try:
         loops = int(sys.argv[1])
@@ -23,7 +27,6 @@ if __name__ == "__main__":
 
     minimum_distance = 2.2
     max_distance = 5.8
-    # 4つの異なるAtomインスタンスをNaとして作成。最短距離と最長距離を指定。
     atom_cluster = FourAtomCluster.from_atom_name(atom_name="Na", count=4, min=minimum_distance, max=max_distance)
     writer = GaussianWriter(atom_cluster)
 
@@ -39,4 +42,8 @@ if __name__ == "__main__":
         print(f"Invalid dimension: {dimension}. Must be '1d', '2d', or '3d'.")
         sys.exit(1)
 
-    writer.write(file_path, loops, algorithm=algorithm)
+    for counter in range(1, loops + 1):
+        # ファイルパスと命名規則を変更
+        file_path = f"{directory_path}output_{dimension}_{counter}.com"
+        writer.write(file_path, loops, algorithm=algorithm)
+        print(f"{file_path} successfully generated.")
