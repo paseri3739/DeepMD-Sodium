@@ -50,4 +50,3 @@ if __name__ == "__main__":
     counter = get_next_file_number()
     file_path = f"{directory_path}output_{dimension}_{counter}.com"
     writer.write(file_path, loops, algorithm=algorithm)
-    print(f"{file_path} successfully generated.")
