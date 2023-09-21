@@ -23,7 +23,10 @@ file_path=$(echo "$last_line" | awk -F" " '{print $NF}')
 echo "File path extracted: $file_path"
 
 # Replace the extension of $file_path from .com to .log
-log_path="${file_path%.com}.log"
+com_name=$(basename "$file_path")
+mkdir -p "./logfile/$2"
+log_path="./logfile/$2/${com_name%.com}.log"
+
 
 # Run the Gaussian simulation
 echo "Gaussian Launching..."
