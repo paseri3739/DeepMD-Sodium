@@ -27,7 +27,7 @@ existing_dirs = [
     for d in os.listdir(base_output_dir)
     if os.path.isdir(os.path.join(base_output_dir, d)) and re.match(rf"{dimension}_set_\d+", d)
 ]
-existing_indexes = [int(match.group()) for d in existing_dirs if (match := re.search(r"\d+", d)) is not None]
+existing_indexes = [int(match.group()) for d in existing_dirs if (match := re.search(r"\d+$", d)) is not None]
 
 next_index = max(existing_indexes, default=0) + 1
 
