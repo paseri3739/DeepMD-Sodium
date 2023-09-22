@@ -25,5 +25,4 @@ os.makedirs(output_dir, exist_ok=True)
 multiple = dpdata.LabeledSystem(file_name=sys.argv[1], fmt="gaussian/md")  # 正規表現で捕捉する
 
 print(multiple)
-multiple.to_deepmd_raw(output_dir)
-multiple.to("deepmd/npy", "data", set_size=200)
+multiple.to(fmt="deepmd/raw", file_name="data", set_size=200)
