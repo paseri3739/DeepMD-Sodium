@@ -34,5 +34,4 @@ g16 < "$file_path" > "$log_path"
 echo "Gaussian Done"
 
 # Run the Python scripts for post-processing
-python3 ./postprocess/split_gaussian.py "$log_path" "$2"
-python3 ./postprocess/import_gaussian_from_dir.py "splited/${2}_set_1"  # Assuming you want to process the latest set
+python3 ./postprocess/import_gaussian_multiframes.py $log_path  # Assuming you want to process the latest set
