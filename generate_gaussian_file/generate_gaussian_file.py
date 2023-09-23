@@ -48,5 +48,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     counter = get_next_file_number()
-    file_path = f"{directory_path}output_{dimension}_{counter}.com"
+    # file_pathの行を変更します。
+    file_path = f"{directory_path}{dimension}_set_{counter}.com"
+
     writer.write(file_path, loops, algorithm=algorithm)
