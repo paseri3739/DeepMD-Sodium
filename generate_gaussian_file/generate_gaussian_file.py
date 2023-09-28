@@ -13,6 +13,10 @@ if __name__ == "__main__":
 
     loops = int(sys.argv[1])
     dimension = sys.argv[2]
+    # スクリプトのあるディレクトリを取得
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    # スクリプトのあるディレクトリの1つ上のディレクトリをカレントディレクトリに設定
+    os.chdir(os.path.join(script_dir, "../"))
     directory_path = f"./comfile/{dimension}/"
 
     if not os.path.exists(directory_path):
