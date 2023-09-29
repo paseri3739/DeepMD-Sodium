@@ -10,7 +10,8 @@ if [ -z "$2" ]; then
     echo "No dimension specified"
     exit 1
 fi
-
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+cd "$SCRIPT_DIR"
 echo "Running Python script with: $1 $2"
 
 # Run the Python script and capture the last line containing the specific message into a variable

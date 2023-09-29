@@ -38,3 +38,4 @@ multiple = dpdata.LabeledSystem(file_name=input_file, fmt="gaussian/md")
 
 print(multiple)
 multiple.to(fmt="deepmd/raw", file_name=output_file_name, set_size=200)
+multiple.to(fmt="deepmd/npy", file_name=output_file_name, set_size=200)

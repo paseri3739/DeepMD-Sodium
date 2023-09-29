@@ -25,7 +25,7 @@ if __name__ == "__main__":
     def get_next_file_number():
         """Get the next file number based on existing files in the directory."""
         files = os.listdir(directory_path)
-        pattern = re.compile(rf"output_{dimension}_(\d+).com")
+        pattern = re.compile(rf"{dimension}_set_(\d+).com")
         max_number = 0
         for file in files:
             match = pattern.match(file)
