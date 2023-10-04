@@ -31,7 +31,7 @@ log_path="./logfile/$2/${com_name%.com}.log"
 
 # Run the Gaussian simulation
 echo "Gaussian Launching..."
-g16 < "$file_path" > "$log_path"
+g16 < "$file_path" > "$log_path" 
 echo "Gaussian Done"
 
 # Run the Python scripts for post-processing
