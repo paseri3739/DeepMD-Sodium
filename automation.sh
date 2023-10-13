@@ -35,4 +35,4 @@ g16 < "$file_path" > "$log_path"
 echo "Gaussian Done"
 
 # Run the Python scripts for post-processing
-python3 ./postprocess/import_gaussian_multiframes.py $log_path  # Assuming you want to process the latest set
+#python3 ./postprocess/import_gaussian_multiframes.py $log_path  # Assuming you want to process the latest set

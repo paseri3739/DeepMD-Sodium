@@ -7,6 +7,10 @@ def remove_error_from_gaussian_output(input_file):
     with open(input_file, "r") as f:
         lines = f.readlines()
 
+    # 最後の行が"Normal termination of Gaussian 16"を含んでいる場合、エラー除去をスキップ
+    if "Normal termination of Gaussian 16" in lines[-1]:
+        return lines
+
     # "Initial command:"で始まる行を探し、ヒットする最後の行のインデックスを取得
     index_to_remove = None
     for i, line in enumerate(lines):
