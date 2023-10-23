@@ -1,0 +1,13 @@
+units           metal
+atom_style      atomic
+boundary        p p p
+box             tilt large	
+read_data       7_9a1_1.data
+pair_style      deepmd graph-compress.pb
+pair_coeff 	* *
+neigh_modify    delay 0
+dump            1 all custom 10 7_9a1_1.dump id type xs ys zs ix iy iz
+thermo_style    custom step temp epair emol etotal press vol density
+thermo          10
+minimize        1e-4 1e-6 100000 1000000
+
