@@ -85,6 +85,19 @@ python plot_from_gaussian.py <--plot=2d> </path/to/gaussian.com>
 でgaussian.comの出力をデフォルトでは3次元プロットする。
 コマンドライン引数を指定すると2dプロットにすることができる。二次元での計算が保証されている場合に利用する。x,y,zの縮尺は1:1:1になるように固定している。
 
+# plot_from_lammps_dump.py
+
+```bash
+python plot_from_lammps_dump.py /path/to/dump
+```
+でlammpsのdumpファイルを読み込んで3次元プロットする。カレントディレクトリの直下に同名のディレクトリが作成され、その中にすべてのステップをプロットした画像が保存される。
+
+# plot_from_lammps_dump_2d.py
+
+```bash
+python plot_from_lammps_dump_2d.py /path/to/dump
+```
+
 # オートメーション
 ```bash
 cd <project_root_directory>
