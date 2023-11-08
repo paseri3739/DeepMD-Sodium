@@ -1,21 +1,22 @@
 from ase import Atoms
-import numpy as np
 from ase.constraints import FixBondLengths
+from ase.io.gaussian import write_gaussian_in
 from random import uniform
+import numpy as np
 
-# Na原子5つの初期配置を作成（三方両錐形）
+# Define positions for a trigonal bipyramidal structure of Na atoms
 positions = [
-    (0, 0, 0),  # 中心のNa原子
-    (0, 0, 1),  # 三方両錐形の一つの頂点
-    (np.sqrt(3) / 2, 0, -0.5),  # 底面のNa原子
-    (-np.sqrt(3) / 2, 0, -0.5),  # 底面のNa原子
-    (0, 1, -0.5),  # 底面のNa原子
+    (0, 0, 0),  # Central Na atom
+    (0, 0, 1),  # Vertex of the trigonal bipyramid
+    (np.sqrt(3) / 2, 0, -0.5),  # Base atoms of the bipyramid
+    (-np.sqrt(3) / 2, 0, -0.5),  # Base atoms of the bipyramid
+    (0, 1, -0.5),  # Base atoms of the bipyramid
 ]
 
-# Atomsオブジェクトを作成
+# Create the Atoms object
 atoms = Atoms("Na5", positions=positions)
 
-# 結合距離の制約を作成（すべての結合距離を6Å以内に）
+# Create constraints for all bond lengths to be less than 6 Å
 constraints = []
 for i in range(1, 5):
     for j in range(i + 1, 5):
@@ -23,11 +24,11 @@ for i in range(1, 5):
 
 constraint = FixBondLengths(constraints)
 
-# Atomsオブジェクトに制約を適用
+# Apply the constraints to the Atoms object
 atoms.set_constraint(constraint)
 
 
-# 構造をランダムに生成する関数
+# Function to generate a random structure with bond length constraints
 def generate_structure(atoms, distance=6.0):
     while True:
         new_positions = []
@@ -35,7 +36,7 @@ def generate_structure(atoms, distance=6.0):
             new_positions.append(pos + uniform(-0.5, 0.5))
         atoms.set_positions(new_positions)
 
-        # 結合距離が制約を満たしているかをチェック
+        # Check if the bond lengths satisfy the constraints
         distances = atoms.get_all_distances()
         if np.all(distances[np.triu_indices(5, 1)] < distance):
             break
@@ -43,14 +44,25 @@ def generate_structure(atoms, distance=6.0):
     return atoms
 
 
-# ランダムな構造を生成
+# Generate a random structure
 random_structure = generate_structure(atoms)
 
-# スクリプトの最後に以下を追加します。
+# Output the optimized atomic positions
+print("Optimized atomic positions:")
+print(random_structure.positions)
 
-# 最適化された原子の位置を出力
-print("最適化された原子の位置:")
-print(atoms.positions)
+# Save the optimized structure in XYZ file format
+random_structure.write("optimized_structure.xyz")
 
-# 最適化された構造をXYZファイル形式で保存
-atoms.write("optimized_structure.xyz")
+# Write out the Gaussian input file including force calculation
+with open("gaussian_input_with_forces.com", "w") as file:
+    write_gaussian_in(
+        file,
+        random_structure,
+        label="Na5",
+        method="B3LYP",
+        basis="6-31G(d)",
+        extra="Force",
+    )
+
+print("Gaussian input file including force calculation has been generated.")

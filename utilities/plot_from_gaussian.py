@@ -79,7 +79,9 @@ def _plot_molecule(ax: plt.Axes, molecule, index: int, plot_type: str) -> None:
     if plot_type == "3d":
         ax.set_zlabel("Z")
 
-        max_range = np.array([max(x) - min(x), max(y) - min(y), max(z) - min(z)]).max() / 2.0
+        max_range = (
+            np.array([max(x) - min(x), max(y) - min(y), max(z) - min(z)]).max() / 2.0
+        )
         mean_x, mean_y, mean_z = np.mean(x), np.mean(y), np.mean(z)
         ax.auto_scale_xyz(
             [mean_x - max_range, mean_x + max_range],
@@ -99,7 +101,12 @@ def plot_molecules_partial(axs, molecules, start_index: int, plot_type: str) -> 
 def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
-    parser.add_argument("--plot", default="3d", choices=["2d", "3d"], help="Choose the type of plot: 2D or 3D.")
+    parser.add_argument(
+        "--plot",
+        default="3d",
+        choices=["2d", "3d"],
+        help="Choose the type of plot: 2D or 3D.",
+    )
     parser.add_argument("--show", action="store_true", help="Display the plot.")
     return parser.parse_args()
 
@@ -107,7 +114,10 @@ def parse_arguments() -> argparse.Namespace:
 def initialize_plot_grid(plot_type: str, grid_size: int = 10) -> plt.Figure:
     n = _get_plot_dimensions(grid_size)
     fig, axs = plt.subplots(
-        n, n, figsize=(5 * n, 5 * n), subplot_kw={"projection": "3d" if plot_type == "3d" else None}
+        n,
+        n,
+        figsize=(5 * n, 5 * n),
+        subplot_kw={"projection": "3d" if plot_type == "3d" else None},
     )
     return fig, axs
 
@@ -129,12 +139,16 @@ def process_and_plot_molecules(file, plot_type: str, show: bool, batch_size: int
             num_molecules += 1
 
             if len(molecules_buffer) == batch_size:
-                plot_and_save_batch(axs, molecules_buffer, num_molecules - batch_size, plot_type)
+                plot_and_save_batch(
+                    axs, molecules_buffer, num_molecules - batch_size, plot_type
+                )
                 molecules_buffer = []
                 fig, axs = initialize_plot_grid(plot_type, batch_size)
 
     if molecules_buffer:
-        plot_and_save_batch(axs, molecules_buffer, num_molecules - len(molecules_buffer), plot_type)
+        plot_and_save_batch(
+            axs, molecules_buffer, num_molecules - len(molecules_buffer), plot_type
+        )
 
     if show:
         plt.show()
