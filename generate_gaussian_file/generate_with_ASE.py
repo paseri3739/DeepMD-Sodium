@@ -1,6 +1,7 @@
 from ase import Atoms
 from ase.constraints import FixBondLengths
 from ase.io.gaussian import write_gaussian_in
+from ase.visualize import view
 from random import uniform
 import numpy as np
 
