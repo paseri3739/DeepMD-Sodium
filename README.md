@@ -1,7 +1,6 @@
 # random_coords_for_gaussian
-本プロジェクトは科学技術の発展振興のため、GPL3.0により公開する。改変したプログラムを公開する場合GPLを適用しソースコード全体を公開せよ。
+本プロジェクトは科学技術の発展振興のため、GPL3.0により公開する。
 
-このプログラムは、複数のガウス分布の座標を生成して機械学習を行うための一連のフローを提供する。
 
 # 設計の説明:
 Atom, AtomClusterInterface, GeneralAtomCluster, FourAtomCluster, GaussianWriterの4つのクラスを定義している。
