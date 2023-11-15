@@ -2,14 +2,24 @@
   "type_map": [
     "Na"
   ],
+  "init_data_prefix": "",
   "init_data_sys": [
-    "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/data/Na7/set.000/"
+    "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/data/Na7/"
   ],
   "sys_configs": [
-    "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/"
+    [
+      "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/"
+    ]
   ],
   "numb_models": 4,
-  "default_training_param": {},
+  "default_training_param": {
+    "numb_steps": 1000000,
+    "seed": 1,
+    "batch_size": "auto",
+    "start_lr": 0.001,
+    "decay_steps": 5000,
+    "decay_rate": 0.95
+  },
   "fp_task_max": 20,
   "fp_task_min": 1,
   "model_devi_engine": "lammps",
