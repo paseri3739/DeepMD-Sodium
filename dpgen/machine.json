@@ -1,0 +1,38 @@
+{
+  "train": {
+    "command": "dp",
+    "machine": {
+      "batch_type": "Shell",
+      "local_root": "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/",
+      "context_type": "LocalContext"
+    },
+    "resources": {
+      "group_size": 14,
+      "batch_type": "Shell"
+    }
+  },
+  "model_devi": {
+    "command": "lmp_mpi",
+    "machine": {
+      "batch_type": "Shell",
+      "local_root": "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/",
+      "context_type": "LocalContext"
+    },
+    "resources": {
+      "group_size": 14,
+      "batch_type": "Shell"
+    }
+  },
+  "fp": {
+    "command": "g16",
+    "machine": {
+      "batch_type": "Shell",
+      "local_root": "/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/",
+      "context_type": "LocalContext"
+    },
+    "resources": {
+      "group_size": 14,
+      "batch_type": "Shell"
+    }
+  }
+}
