@@ -1,0 +1,62 @@
+
+#!/bin/bash -l
+
+
+
+REMOTE_ROOT=$(readlink -f /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/77706870bfa47fdc89596ead8f4a4cfd08c52749)
+echo 0 > $REMOTE_ROOT/7e63d83a543774512c0dc14422963ad620f3a6d0_flag_if_job_task_fail
+test $? -ne 0 && exit 1
+
+
+
+
+
+
+
+
+cd $REMOTE_ROOT
+cd 002
+test $? -ne 0 && exit 1
+if [ ! -f 7f78787e4f2eb0e458cd3455b408e364fb0cef05_task_tag_finished ] ;then
+   ( /bin/sh -c '{ if [ ! -f model.ckpt.index ]; then dp train input.json; else dp train input.json --restart model.ckpt; fi }'&&dp freeze ) 1>>train.log 2>>train.log 
+  if test $? -eq 0; then touch 7f78787e4f2eb0e458cd3455b408e364fb0cef05_task_tag_finished; else echo 1 > $REMOTE_ROOT/7e63d83a543774512c0dc14422963ad620f3a6d0_flag_if_job_task_fail;fi
+fi &
+wait 
+
+cd $REMOTE_ROOT
+cd 001
+test $? -ne 0 && exit 1
+if [ ! -f 0086a32201ed530492069a8682a0b42cd3dbb98d_task_tag_finished ] ;then
+   ( /bin/sh -c '{ if [ ! -f model.ckpt.index ]; then dp train input.json; else dp train input.json --restart model.ckpt; fi }'&&dp freeze ) 1>>train.log 2>>train.log 
+  if test $? -eq 0; then touch 0086a32201ed530492069a8682a0b42cd3dbb98d_task_tag_finished; else echo 1 > $REMOTE_ROOT/7e63d83a543774512c0dc14422963ad620f3a6d0_flag_if_job_task_fail;fi
+fi &
+wait 
+
+cd $REMOTE_ROOT
+cd 003
+test $? -ne 0 && exit 1
+if [ ! -f b25f9ec6ed6cce3bcd6a5428df234c859b0936dd_task_tag_finished ] ;then
+   ( /bin/sh -c '{ if [ ! -f model.ckpt.index ]; then dp train input.json; else dp train input.json --restart model.ckpt; fi }'&&dp freeze ) 1>>train.log 2>>train.log 
+  if test $? -eq 0; then touch b25f9ec6ed6cce3bcd6a5428df234c859b0936dd_task_tag_finished; else echo 1 > $REMOTE_ROOT/7e63d83a543774512c0dc14422963ad620f3a6d0_flag_if_job_task_fail;fi
+fi &
+wait 
+
+cd $REMOTE_ROOT
+cd 000
+test $? -ne 0 && exit 1
+if [ ! -f 7dd0baba3ae9abd4b1afaa21c4a3ba214633f5cf_task_tag_finished ] ;then
+   ( /bin/sh -c '{ if [ ! -f model.ckpt.index ]; then dp train input.json; else dp train input.json --restart model.ckpt; fi }'&&dp freeze ) 1>>train.log 2>>train.log 
+  if test $? -eq 0; then touch 7dd0baba3ae9abd4b1afaa21c4a3ba214633f5cf_task_tag_finished; else echo 1 > $REMOTE_ROOT/7e63d83a543774512c0dc14422963ad620f3a6d0_flag_if_job_task_fail;fi
+fi &
+wait 
+
+
+cd $REMOTE_ROOT
+test $? -ne 0 && exit 1
+
+wait
+FLAG_IF_JOB_TASK_FAIL=$(cat 7e63d83a543774512c0dc14422963ad620f3a6d0_flag_if_job_task_fail)
+if test $FLAG_IF_JOB_TASK_FAIL -eq 0; then touch 7e63d83a543774512c0dc14422963ad620f3a6d0_job_tag_finished; else exit 1;fi
+
+
+
