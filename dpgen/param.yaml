@@ -16,7 +16,7 @@ default_training_param:
       type: se_e2_a
       sel:
       - 60
-      rcut: 6
+      rcut: 6.0
       rcut_smth: 1.8
       neuron:
       - 25
@@ -50,8 +50,6 @@ default_training_param:
     limit_pref_v: 0
   training:
     training_data:
-      systems:
-      - ./data/3d/
       set_prefix: set
       batch_size: auto
     numb_steps: 1000000
