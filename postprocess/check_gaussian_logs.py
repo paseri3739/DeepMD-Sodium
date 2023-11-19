@@ -31,17 +31,17 @@ def check_gaussian_logs(directory):
     return abnormal_termination_indices
 
 
-def delete_abnormal_com_files(log_directory, com_directory):
+def delete_abnormal_log_files(log_directory):
     # Get the indices of log files with abnormal termination
     abnormal_indices = check_gaussian_logs(log_directory)
 
     # Iterate over these indices and delete corresponding .com files
     for index in abnormal_indices:
-        com_file_path = os.path.join(com_directory, f"coordinates_{index}.com")
+        com_file_path = os.path.join(log_directory, f"coordinates_{index}.log")
         if os.path.exists(com_file_path):
             os.remove(com_file_path)
             print(f"Deleted file: {com_file_path}")
 
 
 # Example usage:
-delete_abnormal_com_files(log_files_dir, com_files_dir)
+delete_abnormal_log_files(log_files_dir)
