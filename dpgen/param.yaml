@@ -4,7 +4,7 @@ init_data_prefix: ''
 init_data_sys:
   - /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/data/Na7/
 sys_configs:
-  - - /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/
+  - - /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/iter.000000/00.train/
 numb_models: 4
 default_training_param:
   model:
@@ -49,9 +49,6 @@ default_training_param:
     start_pref_v: 0
     limit_pref_v: 0
   training:
-    training_data:
-      set_prefix: set
-      batch_size: auto
     numb_steps: 1000000
     seed: 1
     disp_file: lcurve.out
@@ -68,6 +65,12 @@ model_devi_engine: lammps
 model_devi_jobs:
   - sys_idx:
       - 0
+    temps:
+      - 300
+    press:
+      - 1
+    nsteps: 1000
+    ensemble: npt
     trj_freq: 10
 model_devi_dt: 0.002
 model_devi_skip: 0
@@ -79,4 +82,4 @@ cluster_cutoff: 6
 fp_params:
   keywords: B3LYP/6-311+g(d) force
   nproc: 14
-
+  charge: 0
