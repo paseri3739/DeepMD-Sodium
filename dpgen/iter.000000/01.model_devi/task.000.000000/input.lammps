@@ -12,7 +12,6 @@ atom_style      atomic
 
 neighbor        1.0 bin
 
-box          tilt large
 if "${restart} > 0" then "read_restart dpgen.restart.*" else "read_data conf.lmp"
 change_box   all triclinic
 mass            1 22.989769
