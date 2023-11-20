@@ -3,9 +3,9 @@ type_map:
 init_data_prefix: ''
 init_data_sys:
   - /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/data/Na7/
-sys_format: gaussian/log
+sys_format: deepmd/npy
 sys_configs:
-  - - /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/init_comfile/*.log
+  - - /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/data/Na7/
 numb_models: 4
 default_training_param:
   model:
@@ -71,15 +71,26 @@ model_devi_jobs:
     press:
       - 1
     nsteps: 1000
-    ensemble: npt
+    ensemble: nvt
     trj_freq: 10
+    _idx: "00"
+  - sys_idx:
+      - 0
+    temps:
+      - 300
+    press:
+      - 1
+    nsteps: 3000
+    ensemble: nvt
+    trj_freq: 10
+    _idx: "01"
 model_devi_dt: 0.002
 model_devi_skip: 0
 model_devi_f_trust_lo: 0.05
 model_devi_f_trust_hi: 0.15
 fp_style: gaussian
 use_clusters: true
-cluster_cutoff: 6
+cluster_cutoff: 6.0
 fp_params:
   keywords: B3LYP/6-311+g(d) force
   nproc: 14

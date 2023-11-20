@@ -1,0 +1,35 @@
+
+#!/bin/bash -l
+
+
+
+REMOTE_ROOT=$(readlink -f /home/sekinelabo/Documents/DeepMD-Sodium/dpgen/228220fd005ed5af8d798490d1bf388206fd6c29)
+echo 0 > $REMOTE_ROOT/97abc0ddc98f0ae10ad2024a4e77837b04a475e6_flag_if_job_task_fail
+test $? -ne 0 && exit 1
+
+
+
+
+
+
+
+
+cd $REMOTE_ROOT
+cd task.000.000000
+test $? -ne 0 && exit 1
+if [ ! -f 3e4dec6bb47f07880a180431babc3e158d2845ed_task_tag_finished ] ;then
+   ( /bin/bash -c '{ if [ ! -f dpgen.restart.10000 ]; then lmp_mpi -i input.lammps -v restart 0; else lmp_mpi -i input.lammps -v restart 1; fi }' ) 1>>model_devi.log 2>>model_devi.log 
+  if test $? -eq 0; then touch 3e4dec6bb47f07880a180431babc3e158d2845ed_task_tag_finished; else echo 1 > $REMOTE_ROOT/97abc0ddc98f0ae10ad2024a4e77837b04a475e6_flag_if_job_task_fail;fi
+fi &
+wait 
+
+
+cd $REMOTE_ROOT
+test $? -ne 0 && exit 1
+
+wait
+FLAG_IF_JOB_TASK_FAIL=$(cat 97abc0ddc98f0ae10ad2024a4e77837b04a475e6_flag_if_job_task_fail)
+if test $FLAG_IF_JOB_TASK_FAIL -eq 0; then touch 97abc0ddc98f0ae10ad2024a4e77837b04a475e6_job_tag_finished; else exit 1;fi
+
+
+

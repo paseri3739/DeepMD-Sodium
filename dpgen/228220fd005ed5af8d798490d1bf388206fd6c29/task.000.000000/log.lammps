@@ -1,0 +1,25 @@
+LAMMPS (2 Aug 2023 - Update 1)
+variable        NSTEPS          equal 1000
+variable        THERMO_FREQ     equal 10
+variable        DUMP_FREQ       equal 10
+variable        TEMP            equal 300.000000
+variable        PRES            equal -1.000000
+variable        TAU_T           equal 0.100000
+variable        TAU_P           equal 0.500000
+
+units           metal
+boundary        p p p
+atom_style      atomic
+
+neighbor        1.0 bin
+
+box          tilt large
+
+The 'box' command has been removed and will be ignored
+
+if "${restart} > 0" then "read_restart dpgen.restart.*" else "read_data conf.lmp"
+read_data conf.lmp
+Reading data file ...
+  triclinic box = (0 0 0) to (0 0 0) with tilt (0 0 0)
+ERROR on proc 0: Box bounds are invalid or missing (../domain.cpp:209)
+Last command: read_data conf.lmp
