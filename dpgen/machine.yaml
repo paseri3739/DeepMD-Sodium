@@ -21,7 +21,7 @@ model_devi:
     group_size: 14
     batch_type: Shell
 fp:
-  command: g16
+  command: "g16 < input > output || :"
   machine:
     batch_type: Shell
     local_root: ./
@@ -29,5 +29,6 @@ fp:
     context_type: local
   resources:
     gpu_per_node: 1
-    group_size: 14
+    cpu_per_node: 14
+    group_size: 1
     batch_type: Shell

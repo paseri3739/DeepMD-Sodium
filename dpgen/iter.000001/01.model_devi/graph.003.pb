@@ -1,0 +1,1 @@
+/home/sekinelabo/Documents/DeepMD-Sodium/dpgen/iter.000001/00.train/graph.003.pb

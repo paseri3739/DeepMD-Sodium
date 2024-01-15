@@ -1,0 +1,102 @@
+type_map:
+  - Na
+pick_data: /home/sekinelabo/Documents/DP-GEN_Sodium/dpgen/simplify
+init_data_prefix: ''
+init_data_sys:
+  - /home/sekinelabo/Documents/DP-GEN_Sodium/dpgen/data/Na7/
+sys_format: deepmd/npy
+sys_configs:
+  - - /home/sekinelabo/Documents/DP-GEN_Sodium/dpgen/data/Na7/
+numb_models: 4
+default_training_param:
+  model:
+    type_map:
+    - Na
+    data_stat_nbatch: 1
+    type: standard
+    descriptor:
+      type: se_e2_a
+      activation_function: relu
+      sel:
+      - 60
+      rcut: 6.0
+      rcut_smth: 1.8
+      neuron:
+      - 25
+      - 50
+      - 100
+      axis_neuron: 8
+      resnet_dt: false
+      precision: float64
+      seed: 1
+    fitting_net:
+      type: ener
+      neuron:
+      - 240
+      - 240
+      - 240
+      precision: float64
+      resnet_dt: true
+      seed: 1
+  learning_rate:
+    type: exp
+    start_lr: 0.001
+    stop_lr: 1.0e-08
+    decay_steps: 5000
+  loss:
+    type: ener
+    start_pref_e: 0.02
+    limit_pref_e: 1
+    start_pref_f: 1000
+    limit_pref_f: 1
+    start_pref_v: 0
+    limit_pref_v: 0
+  training:
+    numb_steps: 1000000
+    seed: 1
+    disp_file: lcurve.out
+    disp_freq: 100
+    save_freq: 1000
+    save_ckpt: model.ckpt
+    disp_training: true
+    time_training: true
+    profiling: false
+    profiling_file: timeline.json
+fp_task_max: 3000
+fp_task_min: 1
+model_devi_engine: lammps
+model_devi_jobs:
+  - sys_idx:
+      - 0
+    temps:
+      - 300
+    press:
+      - 1
+    nsteps: 10000
+    ensemble: nvt
+    trj_freq: 10
+    _idx: "00"
+  - sys_idx:
+      - 0
+    temps:
+      - 300
+    press:
+      - 1
+    nsteps: 30000
+    ensemble: nvt
+    trj_freq: 10
+    _idx: "01"
+model_devi_dt: 0.002
+model_devi_skip: 0
+model_devi_f_trust_lo: 0.05
+model_devi_f_trust_hi: 0.15
+model_devi_clean_traj: false
+model_devi_nopbc: true
+fp_style: gaussian
+use_clusters: false
+fp_params:
+  keywords: P B3LYP/6-311+g(d) force
+  nproc: 14
+  charge: 0
+init_pick_number: 100,
+iter_pick_number: 100,
